@@ -36,8 +36,8 @@
 <body>
     <div class="sidebar">
         <h4>Admin Panel</h4>
-        <a href="#">Dashboard</a>
-        <a href="#">Service Requests</a>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="service_requests.php">Service Requests</a>
         <a href="#">Drivers</a>
         <a href="#">Reports</a>
         <a href="#">Settings</a>
