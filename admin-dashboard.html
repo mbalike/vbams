@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>VBAMS</title>
+
+        <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+
+  <Script>
+          function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin');
+            if(isAdmin !== 'true') {
+                alert('You must be logged in to access the admin dashboard.');
+                window.location.href = 'Login.html';
+            }
+          }
+
+          function logout() {
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'index.html';
+          }
+
+          const breakdownRequests = [
+            { id: 1, vehicleId: 'ABC123', Location: 'Downtown', description: 'Flat tire', status: 'pending'},
+            { id: 2, vehicleId: 'XYZ456', Location: 'Main Street', description: 'Engine Overheating', status: 'pending'},
+            { id: 3, vehicleId: 'LMN789', Location: 'Highway 7', description: 'battery failure', status: 'Assisted'}
+          ];
+
+
+          function escepeHTML(str){
+            if (typeof str !== 'string') return str;
+            return str.replace(/[&<>"'']/g,function (match){
+                const escapeMap = {
+                    '&': '&amp;',
+                    '<': '&It;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                };
+                return escapeMap[match];
+            });
+
+            }
+          
+          function loadRequests (){
+            fetch('/api/requests')
+                    .then(Response => response.json())
+                    .then(data =>{
+                        const requestTable = document.getElementById('breakdown-requests-table');
+                        requestTable.innerHTML ='';
+
+                        data.requests.forEach((request) => {
+                            const row = document.createElement('tr');
+                            row.innerHTML =
+                            ('<td>(<button onclick = "rejectRequest(${request.id})">reject</button>)</td>')
+                            requestTable.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error ('Error fetching requests:', error));
+          }
+
+          //Assign assistance (for pending Requests)
+          function assignAssistance(id){
+            updateRequestStatus(id, 'Assisted');
+          }
+
+          //mark request as assisted
+          function markAssisted(id){
+            updateRequestStatus(id, 'Assisted');
+          }
+        
+
+          //Reject Request
+
+          function rejectRequest(id){
+            updateRequestStatus(id, 'Rejected');
+          }
+
+          //update the Request Status via Api
+          function updateRequestStatus(id, status){
+            fetch('/api/update-request',{
+                method: 'POST',
+                headers: {
+                    'content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({ id, status}) 
+                
+            })
+            .then(response => response.json ())
+            .then(data => {
+                alert(data.message);
+                loadRequests();
+            })
+            .catch(error => console.error('Error updating request:', error));
+           }
+        //    window.onload = checkAdminStatus;  
+  </Script>
+    </head>
+    <body>
+        <div class="hero_area">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Admin dashboard - vehicle Breakdown Assistance</h1>
+                    <P class="LEAD">Manage vehicle breakdown request, assign assistance, and more.</P>
+                    <button class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                  <div class="col-12">
+                       <h3>Breakdown Assistance Request</h3>
+                       <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                         <th>ID</th>
+                                         <th>Vehicle</th>
+                                         <th>Location</th>
+                                         <th>Description</th>
+                                         <th>Status</th>
+                                         <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="breakdown-request-table">
+                                    
+                                </tbody>
+                        </table>
+                 </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+        <script>
+            loadRequests();
+        </script>
+       
+    </body>
+</html>
