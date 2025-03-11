@@ -58,7 +58,7 @@ if (!$result) {
     </div>
     
     <div class="content">
-        <h2>DriversManagement</h2>
+        <h2>Drivers Management</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
