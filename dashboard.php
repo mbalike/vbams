@@ -38,7 +38,7 @@
         <h4>Admin Panel</h4>
         <a href="dashboard.php">Dashboard</a>
         <a href="service_requests.php">Service Requests</a>
-        <a href="#">Drivers</a>
+        <a href="drivers.php">Drivers</a>
         <a href="#">Reports</a>
         <a href="#">Settings</a>
         <a href="php/logout.php">Logout</a>
