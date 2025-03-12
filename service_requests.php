@@ -17,6 +17,7 @@ $result = mysqli_query($conn, $query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Service Requests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             display: flex;
@@ -94,16 +95,55 @@ $result = mysqli_query($conn, $query);
                             ?>
                         </td>
                         <td>
-                            <!-- Action buttons to update status or assign driver -->
-                            <a href="assign_driver.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Assign Driver</a>
-                            <a href="update_status.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm">Update Status</a>
-                            <a href="delete_request.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#assignDriverModal" data-id="<?= $row['id'] ?>">Assign Driver</button>
+                                <a href="update_status.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm">Update Status</a>
+                                <a href="delete_request.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
     </div>
+    <!-- Assign Driver Modal -->
+    <div class="modal fade" id="assignDriverModal" tabindex="-1" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignDriverModalLabel">Assign Driver</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="assign_driver.php">
+                        <input type="hidden" name="request_id" id="modal_request_id">
+                        <div class="mb-3">
+                            <label class="form-label">Select Driver</label>
+                            <select name="driver_id" class="form-select" required>
+                                <option value="">-- Select Driver --</option>
+                                <?php 
+                                $drivers_query = "SELECT * FROM drivers";
+                                $drivers_result = mysqli_query($conn, $drivers_query);
+                                while ($driver = mysqli_fetch_assoc($drivers_result)): ?>
+                                    <option value="<?= $driver['id'] ?>"><?= $driver['name'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Assign Driver</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var assignDriverModal = document.getElementById('assignDriverModal');
+        assignDriverModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var requestId = button.getAttribute('data-id');
+            document.getElementById('modal_request_id').value = requestId;
+        });
+    </script>
 </body>
 </html>
 
