@@ -2,6 +2,8 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+$current_page = basename($_SERVER['PHP_SELF']); 
+
 // Include database connection file
 include('php/db.php');
 
@@ -44,18 +46,26 @@ $result = mysqli_query($conn, $query);
             padding: 20px;
             width: 100%;
         }
+
+        .sidebar a.active {
+            background-color: #007bff; /* Highlight color */
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h4>Admin Panel</h4>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="service_requests.php">Service Requests</a>
-        <a href="drivers.php">Drivers</a>
-        <a href="#">Reports</a>
-        <a href="#">Settings</a>
-        <a href="php/logout.php">Logout</a>
-    </div>
+<div class="sidebar">
+    <h4>Admin Panel</h4>
+    <a href="dashboard.php" class="<?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">Dashboard</a>
+    <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">Service Requests</a>
+    <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">Drivers</a>
+    <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">Reports</a>
+    <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">Settings</a>
+    <a href="php/logout.php">Logout</a>
+</div>
     
     <div class="content">
         <h2>Service Requests Management</h2>
