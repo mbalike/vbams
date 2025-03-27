@@ -249,28 +249,31 @@
   </div>
 
   <!-- find section starts -->
-
   <section class="find_section ">
     <div class="container">
-
       <div class="row">
         <div class="col-md-10 mx-auto">
           <div class="form_tab_container">
+            <div class="section-heading text-center mb-4">
+              <h2 class="h1 text-white">Vehicle Service Request</h2>
+               <p class="lead text-white">Fill out the details for your vehicle service</p>
+
+            </div>
             </div> 
             <div class="tab-content text-center">
-              <div class="tab-pane active" id="rent">
-                <div class="Rent_form find_form">
-                  <form action="#">
+              <div class="tab-pane active" id="service">
+                <div class="Service_form find_form">
+                  <form action="request-service.php" method="POST">
                     <div class="form-row">
                       <div class="col-md-6 px-0">
                         <div class="form-group ">
                           <div class="input-group ">
                             <div class="input-group-prepend">
                               <div class="input-group-text">
-                                <img src="images/input-location.png" alt="Location Image" />
+                                <!-- <img src="images/input-name.png" alt="Name Image" /> -->
                               </div>
                             </div>
-                            <input type="text" class="form-control" id="inputRentDestination" placeholder="Enter your Landmark Location" />
+                            <input type="text" class="form-control" id="inputName" placeholder="Full Name" name="name" required />
                           </div>
                         </div>
                       </div>
@@ -279,41 +282,50 @@
                           <div class="input-group ">
                             <div class="input-group-prepend">
                               <div class="input-group-text">
-                                <img src="images/input-property.png" alt="Property Image" />
+                                <!-- <img src="images/input-phone.png" alt="Phone Image" /> -->
                               </div>
                             </div>
-                            <input type="text" class="form-control" id="inputRentPropery" placeholder="All Properties" />
+                            <input type="tel" class="form-control" id="inputPhone" placeholder="Phone Number" name="phone" required />
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="col-md-6 px-0">
-                        <div class="form-group">
+                        <div class="form-group ">
                           <div class="input-group ">
                             <div class="input-group-prepend">
                               <div class="input-group-text">
-                                <img src="images/input-room.png" alt="Room Image" />
+                                <!-- <img src="images/input-location.png" alt="Location Image" /> -->
                               </div>
                             </div>
-                            <select class="form-control" id="inputRentRoom">
-                              <option data-display="Room">Room</option>
-                              <option value="1">1 </option>
-                              <option value="2">2 </option>
-                              <option value="3">3 </option>
-                            </select>
+                            <input type="text" class="form-control" id="inputLocation" placeholder="Service Location" name="location" required />
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6 px-0">
+                        <div class="form-group ">
+                          <div class="input-group ">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">
+                                <!-- <img src="images/input-car.png" alt="Car Image" /> -->
+                              </div>
+                            </div>
+                            <input type="text" class="form-control" id="inputCarModel" placeholder="Car Model" name="car_model" required />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12 px-0">
                         <div class="form-group">
                           <div class="input-group ">
                             <div class="input-group-prepend">
                               <div class="input-group-text">
-                                <img src="images/input-price.png" alt="Money Image" />
+                                <!-- <img src="images/input-description.png" alt="Description Image" /> -->
                               </div>
                             </div>
-                            <input type="text" class="form-control" id="inputRentPrice" placeholder="Price" />
+                            <textarea class="form-control" id="inputProblemDescription" placeholder="Describe your problem in detail" name="problem_description" rows="4" required></textarea>
                           </div>
                         </div>
                       </div>
@@ -321,77 +333,7 @@
                     <div class="btn-box">
                       <button type="submit" class="">
                         <span>
-                          Find Now
-                        </span>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="tab-pane" id="buy">
-                <div class="Buy_form find_form">
-                  <form action="#">
-                    <div class="form-row">
-                      <div class="col-md-6 px-0">
-                        <div class="form-group ">
-                          <div class="input-group ">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">
-                                <img src="images/input-location.png" alt="Location Image" />
-                              </div>
-                            </div>
-                            <input type="text" class="form-control" id="inputBuyDestination" placeholder="Enter your Landmark Location" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 px-0">
-                        <div class="form-group ">
-                          <div class="input-group ">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">
-                                <img src="images/input-property.png" alt="Property Image" />
-                              </div>
-                            </div>
-                            <input type="text" class="form-control" id="inputBuyPropery" placeholder="All Properties" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="col-md-6 px-0">
-                        <div class="form-group">
-                          <div class="input-group ">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">
-                                <img src="images/input-room.png" alt="Room Image" />
-                              </div>
-                            </div>
-                            <select class=" form-control" id="inputBuyBhk">
-                              <option data-display="BHK ">BHK</option>
-                              <option value="1">1 </option>
-                              <option value="2">2 </option>
-                              <option value="3">3 </option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 px-0">
-                        <div class="form-group">
-                          <div class="input-group ">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">
-                                <img src="images/input-price.png" alt="Money Image" />
-                              </div>
-                            </div>
-                            <input type="text" class="form-control" id="inputBudget" placeholder="Budget" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="btn-box">
-                      <button type="submit" class="">
-                        <span>
-                          find Now
+                          Submit Request
                         </span>
                       </button>
                     </div>
@@ -404,7 +346,6 @@
       </div>
     </div>
   </section>
-
   <!-- find section ends -->
 
   <!-- about section -->
