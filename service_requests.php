@@ -31,7 +31,15 @@ $result = mysqli_query($conn, $query);
             color: white;
             padding: 20px;
             position: fixed;
+            left: 0;
+            transition: left 0.3s ease-in-out;
         }
+
+        .sidebar.hidden {
+
+            left: -250px;
+        }
+
         .sidebar a {
             color: white;
             display: block;
@@ -44,7 +52,7 @@ $result = mysqli_query($conn, $query);
         .content {
             margin-left: 250px;
             padding: 20px;
-            width: 100%;
+            transition: margin-left 0.3s ease-in-out;
         }
 
         .sidebar a.active {
@@ -54,18 +62,23 @@ $result = mysqli_query($conn, $query);
             border-radius: 5px;
             padding: 10px;
         }
+          .content.full-width {
+          margin-left: 0;
+        }
+        
     </style>
 </head>
 <body>
-<div class="sidebar">
-    <h4>Admin Panel</h4>
-    <a href="dashboard.php" class="<?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">Dashboard</a>
-    <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">Service Requests</a>
-    <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">Drivers</a>
-    <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">Reports</a>
-    <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">Settings</a>
-    <a href="php/logout.php">Logout</a>
-</div>
+    <div class="sidebar" id="sidebar">
+        <button class="btn btn-primary m-2" id="toggleSidebar" style="position:absolute; top:9px; left:180px; margin-top:-5px; background-color:inherit; border:none;">☰</button>
+        <h4>Admin Panel</h4>
+        <a href="dashboard.php" class="<?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">Dashboard</a>
+        <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">Service Requests</a>
+        <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">Drivers</a>
+        <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">Reports</a>
+        <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">Settings</a>
+        <a href="php/logout.php">Logout</a>
+    </div>
     
     <div class="content">
         <h2>Service Requests Management</h2>
@@ -218,6 +231,19 @@ $result = mysqli_query($conn, $query);
         document.getElementById('update_request_id').value = requestId;
     });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var toggleButton = document.getElementById("toggleSidebar");
+    var sidebar = document.getElementById("sidebar");
+    var content = document.querySelector(".content");
+
+    toggleButton.addEventListener("click", function () {
+        sidebar.classList.toggle("hidden");
+        content.classList.toggle("full-width");
+    });
+});
+</script>
+
 
 
 </body>

@@ -4,10 +4,19 @@ error_reporting(E_ALL);
 session_start();
 include 'db.php'; // Ensure this file connects to your database
 
-// Beem SMS API credentials
-$api_key = '<api_key>';
-$secret_key = '<secret_key>';
-$sms_sender = 'INFO'; // Sender ID
+require '../vendor/autoload.php';
+use AfricasTalking\SDK\AfricasTalking;
+
+// Africa's Talking API credentials
+$username   = "mbalike";  
+$apiKey     = "atsk_5d0e2349323bc0a46bcf71f083895c3f0b5d06ae90e02d69328f4327817000470a37fa3e"; 
+
+// Initialize the SDK
+$AT         = new AfricasTalking($username, $apiKey);
+$sms        = $AT->sms();
+
+// Sender ID (optional, should be approved by Africa's Talking)
+$from       = "AFRICASTKNG"; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $request_id = $_POST['request_id'];
@@ -32,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_execute($stmt2);
             mysqli_stmt_close($stmt2);
 
-            // Fetch driver's phone number
+            // Fetch driver's phone number and name
             $query3 = "SELECT phone, name FROM drivers WHERE id = ?";
             $stmt3 = mysqli_prepare($conn, $query3);
             mysqli_stmt_bind_param($stmt3, "i", $driver_id);
@@ -41,43 +50,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $driver = mysqli_fetch_assoc($result);
             mysqli_stmt_close($stmt3);
 
-            if ($driver) {
+            // Fetch request details
+            $query4 = "SELECT location, name, phone, car_model, problem_description FROM requests WHERE id = ?";
+            $stmt4 = mysqli_prepare($conn, $query4);
+            mysqli_stmt_bind_param($stmt4, "i", $request_id);
+            mysqli_stmt_execute($stmt4);
+            $result4 = mysqli_stmt_get_result($stmt4);
+            $request = mysqli_fetch_assoc($result4);
+            mysqli_stmt_close($stmt4);
+
+            if ($driver && $request) {
                 $driver_phone = $driver['phone'];
                 $driver_name = $driver['name'];
 
-                // SMS Message
-                $message = "Hello $driver_name, you have been assigned a new service request. Please check your dashboard for details.";
+                $location = $request['location'];
+                $customer_name = $request['name'];
+                $customer_phone = $request['phone'];
+                $car_model = $request['car_model'];
+                $problem_description = $request['problem_description'];
 
-                // Send SMS
-                $postData = array(
-                    'source_addr' => $sms_sender,
-                    'encoding' => 0,
-                    'message' => $message,
-                    'recipients' => [array('recipient_id' => '1', 'dest_addr' => $driver_phone)]
-                );
+                // Updated SMS Message
+                $message = "Hello $driver_name, new service request at $location. Client: $customer_name ($customer_phone). Car: $car_model. Issue: $problem_description.";
 
-                $url = 'https://apisms.beem.africa/v1/send';
-                $ch = curl_init($url);
+                try {
+                    // Send SMS using Africa's Talking
+                    $smsResult = $sms->send([
+                        'to'      => $driver_phone, // Ensure the phone number is in the correct format (+2547XXXXXXXX)
+                        'message' => $message,
+                    ]);
 
-                curl_setopt_array($ch, array(
-                    CURLOPT_POST => TRUE,
-                    CURLOPT_RETURNTRANSFER => TRUE,
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                    CURLOPT_SSL_VERIFYPEER => 0,
-                    CURLOPT_HTTPHEADER => array(
-                        'Authorization: Basic ' . base64_encode("$api_key:$secret_key"),
-                        'Content-Type: application/json'
-                    ),
-                    CURLOPT_POSTFIELDS => json_encode($postData)
-                ));
+                    // Log SMS response (optional for debugging)
+                    file_put_contents("sms_log.txt", print_r($smsResult, true), FILE_APPEND);
 
-                $response = curl_exec($ch);
-
-                if ($response === FALSE) {
-                    throw new Exception("SMS Error: " . curl_error($ch));
+                } catch (Exception $e) {
+                    throw new Exception("SMS Error: " . $e->getMessage());
                 }
-
-                curl_close($ch);
             }
 
             // Commit transaction
