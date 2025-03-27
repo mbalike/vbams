@@ -107,8 +107,9 @@ $result = mysqli_query($conn, $query);
                         <td>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#assignDriverModal" data-id="<?= $row['id'] ?>">Assign Driver</button>
-                                <a href="update_status.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm">Update Status</a>
-                                <a href="delete_request.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#updateStatusModal" data-id="<?= $row['id'] ?>">Update Status</button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRequestModal" data-id="<?= $row['id'] ?>">Delete</button>
+
                             </div>
                         </td>
                     </tr>
@@ -154,6 +155,71 @@ $result = mysqli_query($conn, $query);
             document.getElementById('modal_request_id').value = requestId;
         });
     </script>
+    <!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteRequestModal" tabindex="-1" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteRequestModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this request?
+            </div>
+            <div class="modal-footer">
+                <form method="POST" action="php/delete_request.php">
+                    <input type="hidden" name="request_id" id="delete_request_id">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var deleteRequestModal = document.getElementById('deleteRequestModal');
+    deleteRequestModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var requestId = button.getAttribute('data-id');
+        document.getElementById('delete_request_id').value = requestId;
+    });
+</script>
+<!-- Update Status Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStatusModalLabel">Update Request Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="php/update_status.php">
+                    <input type="hidden" name="request_id" id="update_request_id">
+                    <div class="mb-3">
+                        <label class="form-label">Select Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Declined">Declined</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var updateStatusModal = document.getElementById('updateStatusModal');
+    updateStatusModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var requestId = button.getAttribute('data-id');
+        document.getElementById('update_request_id').value = requestId;
+    });
+</script>
+
+
 </body>
 </html>
 
