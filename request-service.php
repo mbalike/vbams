@@ -66,12 +66,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_stmt_execute($stmt)) {
                     // Success
                     $_SESSION['success_message'] = "Your service request has been submitted successfully!";
-                    header("Location: service_requests.php"); // Redirect to a thank you or confirmation page
+                    header("Location: thank_you.html"); // Redirect to a thank you or confirmation page
                     exit();
                 } else {
                     // Database insertion failed
                     $_SESSION['error_message'] = "Failed to submit request. Please try again.";
-                    header("Location: request_form.php");
+                    header("Location: index.html");
                     exit();
                 }
             } catch (Exception $e) {
