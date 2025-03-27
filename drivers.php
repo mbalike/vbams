@@ -20,6 +20,41 @@ if (!$result) {
     <title>Admin Dashboard - Drivers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .sidebar a.active {
+            background-color: #007bff; /* Highlight color */
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="sidebar">
@@ -33,7 +68,13 @@ if (!$result) {
 </div>
 
 <div class="content">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Drivers Management</h2>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDriverModal">
+        Add Driver
+    </button>
+</div>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -144,6 +185,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+<!-- Add Driver Modal -->
+<div class="modal fade" id="addDriverModal" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDriverModalLabel">Add New Driver</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="php/add_driver.php">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Driver</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>

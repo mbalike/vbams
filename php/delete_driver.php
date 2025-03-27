@@ -1,0 +1,14 @@
+<?php
+include('db.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    $query = "DELETE FROM drivers WHERE id='$id'";
+
+    if (mysqli_query($conn, $query)) {
+        header("Location: ../drivers.php?success=deleted");
+    } else {
+        echo "Error deleting driver: " . mysqli_error($conn);
+    }
+}
+?>
