@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 $current_page = basename($_SERVER['PHP_SELF']); 
 
-// Include database connection file
+include('php/auth.php');
 include('php/db.php');
 
 // Fetch service requests from the database

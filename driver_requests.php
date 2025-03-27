@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('php/auth.php');
 include('php/db.php');
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {

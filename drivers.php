@@ -1,6 +1,7 @@
 <?php
 // Include database connection file
 include('php/db.php');
+include('php/auth.php');
 $current_page = basename($_SERVER['PHP_SELF']); 
 
 // Fetch drivers from the database
