@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 include('db.php');
 
@@ -14,12 +16,16 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $phone = $_POST['phone'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM users WHERE phone = ?";
+    // Check in the admins table first, then in the drivers table
+    $query = "SELECT id, email, password, 'admin' AS role FROM admins WHERE email = ? 
+              UNION 
+              SELECT id, email, password, 'driver' AS role FROM drivers WHERE email = ?";
+    
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "s", $phone);
+    mysqli_stmt_bind_param($stmt, "ss", $email, $email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 

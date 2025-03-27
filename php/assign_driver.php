@@ -5,8 +5,8 @@ session_start();
 include 'db.php'; // Ensure this file connects to your database
 
 // Beem SMS API credentials
-$api_key = '9d3c04bfb4ef25d7';
-$secret_key = 'YzY3ZDhiOGNlMzU1YzM0ZmUzODliNmYwMzlkNzQ2ZmRmYzk0ZDBlZDllY2EyNDdjNmUyNTVlMDMwN2U1ZjlhNA==';
+$api_key = '<api_key>';
+$secret_key = '<secret_key>';
 $sms_sender = 'INFO'; // Sender ID
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_begin_transaction($conn);
 
         try {
-            // Assign driver to request & update status to 'Accepted'
-            $query1 = "UPDATE requests SET assigned_driver_id = ?, status = 'Accepted' WHERE id = ?";
+            // Assign driver to request & update status to 'Assigned'
+            $query1 = "UPDATE requests SET assigned_driver_id = ?, status = 'Assigned' WHERE id = ?";
             $stmt1 = mysqli_prepare($conn, $query1);
             mysqli_stmt_bind_param($stmt1, "ii", $driver_id, $request_id);
             mysqli_stmt_execute($stmt1);
@@ -42,29 +42,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_close($stmt3);
 
             if ($driver) {
-                // Sanitize and format phone number
-                $driver_phone = preg_replace('/\D/', '', $driver['phone']); // Remove non-digit characters
+                $driver_phone = $driver['phone'];
                 $driver_name = $driver['name'];
 
-                // Construct SMS message
-                $message = "Hello $driver_name, you have been assigned to a new service request. Please check your dashboard for details.";
+                // SMS Message
+                $message = "Hello $driver_name, you have been assigned a new service request. Please check your dashboard for details.";
 
-                // Prepare SMS payload
+                // Send SMS
                 $postData = array(
                     'source_addr' => $sms_sender,
                     'encoding' => 0,
                     'message' => $message,
-                    'recipients' => [array(
-                    'recipient_id' => '1', 
-                    'dest_addr' => $driver_phone
-                    )]
+                    'recipients' => [array('recipient_id' => '1', 'dest_addr' => $driver_phone)]
                 );
-                
-                // Initialize cURL
+
                 $url = 'https://apisms.beem.africa/v1/send';
                 $ch = curl_init($url);
-                
-                // Set cURL options
+
                 curl_setopt_array($ch, array(
                     CURLOPT_POST => TRUE,
                     CURLOPT_RETURNTRANSFER => TRUE,
@@ -74,39 +68,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         'Authorization: Basic ' . base64_encode("$api_key:$secret_key"),
                         'Content-Type: application/json'
                     ),
-                    CURLOPT_POSTFIELDS => json_encode($postData, JSON_UNESCAPED_SLASHES)
+                    CURLOPT_POSTFIELDS => json_encode($postData)
                 ));
-                
-                // Execute cURL request
+
                 $response = curl_exec($ch);
-                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                $error = curl_error($ch);
-                
-                // Detailed error logging
-                file_put_contents('sms_log.txt', 
-                    "Date: " . date('Y-m-d H:i:s') . "\n" .
-                    "HTTP Code: $http_code\n" .
-                    "Response: $response\n" .
-                    "Error: $error\n" .
-                    "Payload: " . json_encode($postData) . "\n" .
-                    "-------------------\n", 
-                    FILE_APPEND
-                );
-                
-                curl_close($ch);
-                
-                // Validate API response
+
                 if ($response === FALSE) {
-                    throw new Exception("SMS Send Failed: " . $error);
-                } else {
-                    // Parse JSON response to confirm success
-                    $responseData = json_decode($response, true);
-                    if (isset($responseData['status']) && $responseData['status'] == 'success') {
-                        $_SESSION['success'] .= " SMS Sent successfully.";
-                    } else {
-                        throw new Exception("SMS API Error: " . json_encode($responseData));
-                    }
+                    throw new Exception("SMS Error: " . curl_error($ch));
                 }
+
+                curl_close($ch);
             }
 
             // Commit transaction
