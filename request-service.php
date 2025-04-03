@@ -3,6 +3,17 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
 include 'php/db.php'; // Ensure this file contains your database connection
+require 'vendor/autoload.php'; // Load Africa's Talking SDK
+
+use AfricasTalking\SDK\AfricasTalking;
+
+// Africa's Talking API credentials
+$username   = "mbalike";  
+$apiKey     = "atsk_5d0e2349323bc0a46bcf71f083895c3f0b5d06ae90e02d69328f4327817000470a37fa3e"; 
+
+// Initialize Africa's Talking SDK
+$AT         = new AfricasTalking($username, $apiKey);
+$sms        = $AT->sms();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and validate inputs
@@ -64,9 +75,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Execute the statement
             try {
                 if (mysqli_stmt_execute($stmt)) {
+                    // Fetch the admin's phone number
+                    $adminQuery = "SELECT phone FROM admins ORDER BY id ASC LIMIT 1";
+                    $adminResult = mysqli_query($conn, $adminQuery);
+                    $adminRow = mysqli_fetch_assoc($adminResult);
+                    $admin_phone = $adminRow['phone'];
+
+                    // Prepare SMS for the admin
+                    $adminMessage = "New service request from $name at $location. Car: $car_model. Issue: $problem_description. Contact: $phone.";
+
+                    // Send SMS to the admin
+                    try {
+                        $sms->send([
+                            'to'      => $admin_phone,
+                            'message' => $adminMessage,
+                            'from'    => "AFRICASTKNG"
+                        ]);
+                    } catch (Exception $e) {
+                        error_log("Error sending SMS: " . $e->getMessage());
+                    }
+
                     // Success
                     $_SESSION['success_message'] = "Your service request has been submitted successfully!";
-                    header("Location: thank_you.html"); // Redirect to a thank you or confirmation page
+                    header("Location: thank_you.html"); // Redirect to a thank you page
                     exit();
                 } else {
                     // Database insertion failed
