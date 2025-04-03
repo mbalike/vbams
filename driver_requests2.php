@@ -6,21 +6,20 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 $current_page = basename($_SERVER['PHP_SELF']);
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {
+    header("Location: ../login.php");
+    exit();
+}
 
-// Fetch service requests from the database
-$query = "SELECT * FROM drivers";
-$result = mysqli_query($conn, $query);
+$driver_id = $_SESSION['user_id'];
 
-// Fetch summary data
-$daily_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE DATE(created_at) = CURDATE()"))['count'];
-$weekly_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)"))['count'];
-$monthly_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE())"))['count'];
+$query = "SELECT * FROM requests WHERE assigned_driver_id = ?";
+$stmt = mysqli_prepare($conn, $query);
+mysqli_stmt_bind_param($stmt, "i", $driver_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-// Status breakdown
-$pending_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE status = 'Pending'"))['count'];
-$accepted_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE status = 'Accepted'"))['count'];
-$declined_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE status = 'Declined'"))['count'];
-$completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM requests WHERE status = 'Completed'"))['count'];
+
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +27,7 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Drivers</title>
+    <title>Driver Dashboard - Requests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -386,14 +385,8 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
         <a href="dashboard.php" class="<?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
-        <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">
-            <i class="fas fa-clipboard-list"></i> Service Requests
-        </a>
-        <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">
-            <i class="fas fa-user-tie"></i> Drivers
-        </a>
-        <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">
-            <i class="fas fa-chart-bar"></i> Reports
+        <a href="driver_requests2.php" class="<?= ($current_page == 'driver_requests2.php') ? 'active' : '' ?>">
+            <i class="fas fa-clipboard-list"></i> My Requests
         </a>
         <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
             <i class="fas fa-cog"></i> Settings
@@ -405,14 +398,12 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
     
     <div class="content" id="content">
         <div class="dashboard-header">
-            <h2>Drivers</h2>
+            <h2>Driver Dashboard</h2>
         </div>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDriverModal">
-        Add Driver
-    </button>
+        
        
         
-        <h3 class="section-header">Drivers List</h3>
+        <h3 class="section-header">My Requests</h3>
         
         <div class="request-table">
             
@@ -425,7 +416,6 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                         <th>Location</th>
                         <th>Issue</th>
                         <th>Status</th>
-                        <th>Driver</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -435,34 +425,38 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             <td><strong><?= $row['id'] ?></strong></td>
                             <td><?= $row['name'] ?></td>
                             <td><?= $row['phone'] ?></td>
-                            <td><?= $row['email'] ?></td>
+                            <td><?= $row['location'] ?></td>
+                            <td><?= $row['problem_description'] ?></td>
                             <td>
                                 <?php
                                 $statusClass = 'bg-secondary';
                                 $statusIcon = '';
                                 
-                                if ($row['availability_status'] == 'Offline') {
-                                    $statusClass = 'bg-secondary';
+                                if ($row['status'] == 'Pending') {
+                                    $statusClass = 'bg-warning';
                                     $statusIcon = '<i class="fas fa- me-1"></i>';
-                                } elseif ($row['availability_status'] == 'Available') {
+                                } elseif ($row['status'] == 'Completed') {
                                     $statusClass = 'bg-success';
                                     $statusIcon = '<i class="fas fa- me-1"></i>';
-                                } elseif ($row['availability_status'] == 'Busy') {
+                                } elseif ($row['status'] == 'Declined') {
                                     $statusClass = 'bg-danger';
                                     $statusIcon = '<i class="fas fa- me-1"></i>';
                                 }
                                 ?>
-                                <span class="badge <?= $statusClass ?>"><?= $statusIcon . $row['availability_status'] ?></span>
+                                <span class="badge <?= $statusClass ?>"><?= $statusIcon . $row['status'] ?></span>
                             </td>
                             
                             <td>
                                 
-                                <button class="btn action-btn btn-update" data-bs-toggle="modal" data-bs-target="#updateDriver" data-id="<?= $row['id'] ?>">
-                                    <i class="fas fa-edit"></i> Update
-                                </button>
-                                <button class="btn action-btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteDriver" data-id="<?= $row['id'] ?>">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
+                            <form method="POST" action="php/driver_requests_status.php">
+                <input type="hidden" name="request_id" value="<?= htmlspecialchars($row['id']) ?>">
+                <?php if ($row['status'] == 'Pending'): ?>
+                    <button type="submit" name="status" value="Accepted" class="btn btn-info btn-sm">Accept</button>
+                    <button type="submit" name="status" value="Declined" class="btn btn-danger btn-sm">Decline</button>
+                <?php elseif ($row['status'] == 'Accepted'): ?>
+                    <button type="submit" name="status" value="Completed" class="btn btn-primary btn-sm">Complete</button>
+                <?php endif; ?>
+            </form>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -470,135 +464,6 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
             </table>
         </div>
     </div>
-
-    
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteDriver" tabindex="-1" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteDriver">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this driver?</p>
-                    <p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone!</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" action="php/delete_driver.php">
-                        <input type="hidden" name="id" id="delete_driver_id">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update Status Modal -->
-    <div class="modal fade" id="updateDriver" tabindex="-1" aria-labelledby="updateDriver" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateDriver">Edit Driver</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="php/edit_driver.php">
-                        <input type="hidden" name="id" id="edit_driver_id">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" name="name" id="edit_driver_name" class="form-control">        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="tel" name="phone" id="edit_driver_phone" class="form-control">        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" id="edit_driver_email" class="form-control">        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Availability Status</label>
-                            <select name="status" id="edit_driver_status" class="form-control">
-                                <option value="Available">Available</option>
-                                <option value="Offline">Offline</option>
-                                <option value="Busy">Busy</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Edit Driver</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Driver Modal -->
-<div class="modal fade" id="addDriverModal" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addDriverModalLabel">Add New Driver</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="php/add_driver.php">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Phone</label>
-                        <input type="text" name="phone" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Driver</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Sidebar toggle functionality
-            var toggleButton = document.getElementById("toggleSidebar");
-            var sidebar = document.getElementById("sidebar");
-            var content = document.getElementById("content");
-
-            toggleButton.addEventListener("click", function () {
-                sidebar.classList.toggle("hidden");
-                content.classList.toggle("full-width");
-            });
-            
-            
-            // Modal functionality for Delete Request
-            var deleteDriver = document.getElementById('deleteDriver');
-            deleteDriver.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var driverId = button.getAttribute('data-id');
-                document.getElementById('delete_driver_id').value = driverId;
-            });
-            
-            // Modal functionality for edit Driver
-            
-            var editDriver = document.getElementById('editDriver');
-            editDriver.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                
-                document.getElementById("edit_driver_id").value = button.getAttribute("data-id");
-                document.getElementById("edit_driver_name").value = button.getAttribute("data-name");
-                document.getElementById("edit_driver_phone").value = button.getAttribute("data-phone");
-                document.getElementById("edit_driver_email").value = button.getAttribute("data-email");
-                document.getElementById("edit_driver_status").value = button.getAttribute("data-status");
-            });
-        });
-    </script>
-</body>
+    </body>
 </html>
 <?php mysqli_close($conn); ?>

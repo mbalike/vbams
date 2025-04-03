@@ -4,6 +4,10 @@ include('php/auth.php');
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    header("Location: ../driver_requests2.php");
+    exit();
+}
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
