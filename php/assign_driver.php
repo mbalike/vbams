@@ -1,107 +1,97 @@
 <?php
-include 'db.php'; 
-include('php/auth.php');
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 session_start();
+include('db.php');
+include('php/auth.php');
+require '../vendor/autoload.php'; // Load Africa's Talking SDK
 
-require '../vendor/autoload.php';
 use AfricasTalking\SDK\AfricasTalking;
 
 // Africa's Talking API credentials
 $username   = "mbalike";  
 $apiKey     = "atsk_5d0e2349323bc0a46bcf71f083895c3f0b5d06ae90e02d69328f4327817000470a37fa3e"; 
 
-// Initialize the SDK
+// Initialize Africa's Talking SDK
 $AT         = new AfricasTalking($username, $apiKey);
 $sms        = $AT->sms();
 
-// Sender ID (optional, should be approved by Africa's Talking)
-$from       = "AFRICASTKNG"; 
+// Check if the logged-in user is a driver
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {
+    header("Location: ../login.php");
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $request_id = $_POST['request_id'];
-    $driver_id = $_POST['driver_id'];
+    $new_status = $_POST['status'];
 
-    if (!empty($request_id) && !empty($driver_id)) {
-        // Start transaction
-        mysqli_begin_transaction($conn);
+    // Get customer phone number and admin phone number
+    $query = "SELECT r.phone AS customer_phone, 
+                     (SELECT phone FROM admins ORDER BY id ASC LIMIT 1) AS admin_phone 
+              FROM requests r
+              WHERE r.id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "i", $request_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $row = mysqli_fetch_assoc($result);
 
-        try {
-            // Assign driver to request & update status to 'Assigned'
-            $query1 = "UPDATE requests SET assigned_driver_id = ?, status = 'Assigned' WHERE id = ?";
-            $stmt1 = mysqli_prepare($conn, $query1);
-            mysqli_stmt_bind_param($stmt1, "ii", $driver_id, $request_id);
-            mysqli_stmt_execute($stmt1);
-            mysqli_stmt_close($stmt1);
-
-            // Update driver's availability_status to 'Busy'
-            $query2 = "UPDATE drivers SET availability_status = 'Busy' WHERE id = ?";
-            $stmt2 = mysqli_prepare($conn, $query2);
-            mysqli_stmt_bind_param($stmt2, "i", $driver_id);
-            mysqli_stmt_execute($stmt2);
-            mysqli_stmt_close($stmt2);
-
-            // Fetch driver's phone number and name
-            $query3 = "SELECT phone, name FROM drivers WHERE id = ?";
-            $stmt3 = mysqli_prepare($conn, $query3);
-            mysqli_stmt_bind_param($stmt3, "i", $driver_id);
-            mysqli_stmt_execute($stmt3);
-            $result = mysqli_stmt_get_result($stmt3);
-            $driver = mysqli_fetch_assoc($result);
-            mysqli_stmt_close($stmt3);
-
-            // Fetch request details
-            $query4 = "SELECT location, name, phone, car_model, problem_description FROM requests WHERE id = ?";
-            $stmt4 = mysqli_prepare($conn, $query4);
-            mysqli_stmt_bind_param($stmt4, "i", $request_id);
-            mysqli_stmt_execute($stmt4);
-            $result4 = mysqli_stmt_get_result($stmt4);
-            $request = mysqli_fetch_assoc($result4);
-            mysqli_stmt_close($stmt4);
-
-            if ($driver && $request) {
-                $driver_phone = $driver['phone'];
-                $driver_name = $driver['name'];
-
-                $location = $request['location'];
-                $customer_name = $request['name'];
-                $customer_phone = $request['phone'];
-                $car_model = $request['car_model'];
-                $problem_description = $request['problem_description'];
-
-                // Updated SMS Message
-                $message = "Hello $driver_name, new service request at $location. Client: $customer_name ($customer_phone). Car: $car_model. Issue: $problem_description.";
-
-                try {
-                    // Send SMS using Africa's Talking
-                    $smsResult = $sms->send([
-                        'to'      => $driver_phone, // Ensure the phone number is in the correct format (+2547XXXXXXXX)
-                        'message' => $message,
-                    ]);
-
-                    // Log SMS response (optional for debugging)
-                    file_put_contents("sms_log.txt", print_r($smsResult, true), FILE_APPEND);
-
-                } catch (Exception $e) {
-                    throw new Exception("SMS Error: " . $e->getMessage());
-                }
-            }
-
-            // Commit transaction
-            mysqli_commit($conn);
-
-            $_SESSION['success'] = "Driver assigned successfully. SMS notification sent.";
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            $_SESSION['error'] = "Error assigning driver: " . $e->getMessage();
-        }
-    } else {
-        $_SESSION['error'] = "Please select a driver.";
+    if (!$row) {
+        echo "Request not found.";
+        exit();
     }
 
-    header("Location: ../service_requests.php");
-    exit();
+    $customer_phone = $row['customer_phone'];
+    $admin_phone = $row['admin_phone'];
+
+    // Update request status
+    $updateQuery = "UPDATE requests SET status = ? WHERE id = ?";
+    $updateStmt = mysqli_prepare($conn, $updateQuery);
+    mysqli_stmt_bind_param($updateStmt, "si", $new_status, $request_id);
+    
+    if (mysqli_stmt_execute($updateStmt)) {
+        // Sender ID (optional, must be approved)
+        $from = "AFRICASTKNG";
+
+        try {
+            if ($new_status == "Accepted") {
+                // Send SMS to the customer
+                $messageToCustomer = "Your request has been accepted. The driver is on the way!";
+                $sms->send([
+                    'to'      => $customer_phone,
+                    'message' => $messageToCustomer,
+                    'from'    => $from
+                ]);
+
+                // Notify admin
+                $messageToAdmin = "Request #$request_id has been accepted by a driver.";
+                $sms->send([
+                    'to'      => $admin_phone,
+                    'message' => $messageToAdmin,
+                    'from'    => $from
+                ]);
+
+            } elseif ($new_status == "Declined") {
+                // Notify admin so they can reassign
+                $messageToAdmin = "Request #$request_id was declined. Please assign another driver.";
+                $sms->send([
+                    'to'      => $admin_phone,
+                    'message' => $messageToAdmin,
+                    'from'    => $from
+                ]);
+            }
+        } catch (Exception $e) {
+            echo "Error sending SMS: " . $e->getMessage();
+        }
+
+        header("Location: ../driver_requests.php");
+        exit();
+    } else {
+        echo "Error updating request.";
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_stmt_close($updateStmt);
 }
+
+mysqli_close($conn);
 ?>
