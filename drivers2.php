@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Fetch service requests from the database
-$query = "SELECT * FROM requests";
+$query = "SELECT * FROM drivers";
 $result = mysqli_query($conn, $query);
 
 // Fetch summary data
@@ -28,7 +28,7 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Service Requests</title>
+    <title>Admin Dashboard - Drivers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -408,67 +408,7 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
             <h2>Service Requests</h2>
         </div>
         
-        <div class="row card-container">
-            <div class="col-md-3 mb-4">
-                <div class="stat-card bg-primary text-white">
-                    <div class="card-icon"><i class="fas fa-calendar-day"></i></div>
-                    <div class="card-title">Today</div>
-                    <div class="card-value"><?= $daily_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card bg-warning text-white">
-                    <div class="card-icon"><i class="fas fa-calendar-week"></i></div>
-                    <div class="card-title">This Week</div>
-                    <div class="card-value"><?= $weekly_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card bg-success text-white">
-                    <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <div class="card-title">This Month</div>
-                    <div class="card-value"><?= $monthly_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #3a0ca3, #4361ee);">
-                    <div class="card-icon"><i class="fas fa-tasks"></i></div>
-                    <div class="card-title">Total Active</div>
-                    <div class="card-value text-white"><?= $pending_count + $accepted_count ?></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row card-container">
-            <div class="col-md-3 mb-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #f72585, #ff9e00);">
-                    <div class="card-icon"><i class="fas fa-clock"></i></div>
-                    <div class="card-title">Pending</div>
-                    <div class="card-value text-white"><?= $pending_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #4cc9f0, #4361ee);">
-                    <div class="card-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="card-title">Accepted</div>
-                    <div class="card-value text-white"><?= $accepted_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #e63946, #ff9e00);">
-                    <div class="card-icon"><i class="fas fa-times-circle"></i></div>
-                    <div class="card-title">Declined</div>
-                    <div class="card-value text-white"><?= $declined_count ?></div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #2ec4b6, #3a86ff);">
-                    <div class="card-icon"><i class="fas fa-flag-checkered"></i></div>
-                    <div class="card-title">Completed</div>
-                    <div class="card-value text-white"><?= $completed_count ?></div>
-                </div>
-            </div>
-        </div>
+       
         
         <h3 class="section-header">Service Requests List</h3>
         <div class="request-table">
@@ -491,40 +431,32 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             <td><strong><?= $row['id'] ?></strong></td>
                             <td><?= $row['name'] ?></td>
                             <td><?= $row['phone'] ?></td>
-                            <td><?= $row['location'] ?></td>
-                            <td><?= $row['problem_description'] ?></td>
+                            <td><?= $row['email'] ?></td>
                             <td>
                                 <?php
                                 $statusClass = 'bg-secondary';
                                 $statusIcon = '';
                                 
-                                if ($row['status'] == 'Pending') {
+                                if ($row['availability_status'] == 'Offline') {
                                     $statusClass = 'bg-warning';
                                     $statusIcon = '<i class="fas fa-clock me-1"></i>';
-                                } elseif ($row['status'] == 'Accepted') {
+                                } elseif ($row['availability_status'] == 'Available') {
                                     $statusClass = 'bg-info';
                                     $statusIcon = '<i class="fas fa-check-circle me-1"></i>';
-                                } elseif ($row['status'] == 'Declined') {
+                                } elseif ($row['availability_status'] == 'Busy') {
                                     $statusClass = 'bg-danger';
                                     $statusIcon = '<i class="fas fa-times-circle me-1"></i>';
-                                } elseif ($row['status'] == 'Completed') {
-                                    $statusClass = 'bg-success';
-                                    $statusIcon = '<i class="fas fa-flag-checkered me-1"></i>';
                                 }
                                 ?>
-                                <span class="badge <?= $statusClass ?>"><?= $statusIcon . $row['status'] ?></span>
+                                <span class="badge <?= $statusClass ?>"><?= $statusIcon . $row['availability_status'] ?></span>
                             </td>
+                            
                             <td>
-                                <?= ($row['assigned_driver_id']) ? mysqli_fetch_assoc(mysqli_query($conn, "SELECT name FROM drivers WHERE id = " . $row['assigned_driver_id']))['name'] : '<span class="badge bg-secondary">Not Assigned</span>' ?>
-                            </td>
-                            <td>
-                                <button class="btn action-btn btn-assign" data-bs-toggle="modal" data-bs-target="#assignDriverModal" data-id="<?= $row['id'] ?>">
-                                    <i class="fas fa-user-plus"></i> Assign
-                                </button>
-                                <button class="btn action-btn btn-update" data-bs-toggle="modal" data-bs-target="#updateStatusModal" data-id="<?= $row['id'] ?>">
+                                
+                                <button class="btn action-btn btn-update" data-bs-toggle="modal" data-bs-target="#updateDriver" data-id="<?= $row['id'] ?>">
                                     <i class="fas fa-edit"></i> Update
                                 </button>
-                                <button class="btn action-btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteRequestModal" data-id="<?= $row['id'] ?>">
+                                <button class="btn action-btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteDriver" data-id="<?= $row['id'] ?>">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </td>
@@ -535,51 +467,23 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
         </div>
     </div>
 
-    <!-- Assign Driver Modal -->
-    <div class="modal fade" id="assignDriverModal" tabindex="-1" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="assignDriverModalLabel">Assign Driver</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="php/assign_driver.php">
-                        <input type="hidden" name="request_id" id="modal_request_id">
-                        <div class="mb-3">
-                            <label class="form-label">Select Driver</label>
-                            <select name="driver_id" class="form-select" required>
-                                <option value="">-- Select Driver --</option>
-                                <?php 
-                                $drivers_query = "SELECT * FROM drivers";
-                                $drivers_result = mysqli_query($conn, $drivers_query);
-                                while ($driver = mysqli_fetch_assoc($drivers_result)): ?>
-                                    <option value="<?= $driver['id'] ?>"><?= $driver['name'] ?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Assign Driver</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteRequestModal" tabindex="-1" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteDriver" tabindex="-1" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteRequestModalLabel">Confirm Deletion</h5>
+                    <h5 class="modal-title" id="deleteDriver">Confirm Deletion</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this request?</p>
+                    <p>Are you sure you want to delete this driver?</p>
                     <p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone!</p>
                 </div>
                 <div class="modal-footer">
-                    <form method="POST" action="php/delete_request.php">
-                        <input type="hidden" name="request_id" id="delete_request_id">
+                    <form method="POST" action="php/delete_driver.php">
+                        <input type="hidden" name="id" id="delete_driver_id">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
@@ -589,26 +493,38 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
     </div>
 
     <!-- Update Status Modal -->
-    <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateDriver" tabindex="-1" aria-labelledby="updateDriver" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateStatusModalLabel">Update Request Status</h5>
+                    <h5 class="modal-title" id="updateDriver">Edit Driver</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="php/update_status.php">
-                        <input type="hidden" name="request_id" id="update_request_id">
+                    <form method="POST" action="php/edit_driver.php">
+                        <input type="hidden" name="id" id="edit_driver_id">
+                        
                         <div class="mb-3">
-                            <label class="form-label">Select Status</label>
-                            <select name="status" class="form-select" required>
-                                <option value="Pending">Pending</option>
-                                <option value="Accepted">Accepted</option>
-                                <option value="Declined">Declined</option>
-                                <option value="Completed">Completed</option>
+                            <label class="form-label">Name</label>
+                            <input type="text" name="name" id="edit_driver_name" class="form-control">        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" name="phone" id="edit_driver_phone" class="form-control">        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" id="edit_driver_email" class="form-control">        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Availability Status</label>
+                            <select name="status" id="edit_driver_status" class="form-control">
+                                <option value="Available">Available</option>
+                                <option value="Offline">Offline</option>
+                                <option value="Busy">Busy</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update Status</button>
+                        <button type="submit" class="btn btn-primary">Edit Driver</button>
                     </form>
                 </div>
             </div>
@@ -627,28 +543,26 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                 content.classList.toggle("full-width");
             });
             
-            // Modal functionality for Assign Driver
-            var assignDriverModal = document.getElementById('assignDriverModal');
-            assignDriverModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var requestId = button.getAttribute('data-id');
-                document.getElementById('modal_request_id').value = requestId;
-            });
             
             // Modal functionality for Delete Request
-            var deleteRequestModal = document.getElementById('deleteRequestModal');
-            deleteRequestModal.addEventListener('show.bs.modal', function (event) {
+            var deleteDriver = document.getElementById('deleteDriver');
+            deleteDriver.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
-                var requestId = button.getAttribute('data-id');
-                document.getElementById('delete_request_id').value = requestId;
+                var driverId = button.getAttribute('data-id');
+                document.getElementById('delete_driver_id').value = driverId;
             });
             
-            // Modal functionality for Update Status
-            var updateStatusModal = document.getElementById('updateStatusModal');
-            updateStatusModal.addEventListener('show.bs.modal', function (event) {
+            // Modal functionality for edit Driver
+            
+            var editDriver = document.getElementById('editDriver');
+            editDriver.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
-                var requestId = button.getAttribute('data-id');
-                document.getElementById('update_request_id').value = requestId;
+                
+                document.getElementById("edit_driver_id").value = button.getAttribute("data-id");
+                document.getElementById("edit_driver_name").value = button.getAttribute("data-name");
+                document.getElementById("edit_driver_phone").value = button.getAttribute("data-phone");
+                document.getElementById("edit_driver_email").value = button.getAttribute("data-email");
+                document.getElementById("edit_driver_status").value = button.getAttribute("data-status");
             });
         });
     </script>

@@ -169,7 +169,7 @@ if (!$result) {
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    var editDriverModal = document.getElementById("editDriverModal");
+    var editDriverModal = document.getElementById("editDriverModal");Update Status
     editDriverModal.addEventListener("show.bs.modal", function (event) {
         var button = event.relatedTarget;
         document.getElementById("edit_driver_id").value = button.getAttribute("data-id");
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="php/add_driver.php">
+                <form method="POST" action="php/add_driver.php">Update Status
                     <div class="mb-3">
                         <label class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" required>
