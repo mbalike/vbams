@@ -2,7 +2,17 @@
 session_start();
 include('db.php');
 include('php/auth.php');
-require 'AfricasTalkingGateway.php'; // Ensure this file is included
+require '../vendor/autoload.php'; // Load Africa's Talking SDK
+
+use AfricasTalking\SDK\AfricasTalking;
+
+// Africa's Talking API credentials
+$username   = "mbalike";  
+$apiKey     = "atsk_5d0e2349323bc0a46bcf71f083895c3f0b5d06ae90e02d69328f4327817000470a37fa3e"; 
+
+// Initialize Africa's Talking SDK
+$AT         = new AfricasTalking($username, $apiKey);
+$sms        = $AT->sms();
 
 // Check if the logged-in user is a driver
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {
@@ -14,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $request_id = $_POST['request_id'];
     $new_status = $_POST['status'];
 
-    // Get customer phone number and admin phone number
-    $query = "SELECT r.phone AS customer_phone, 
+    // Get customer details and admin phone number
+    $query = "SELECT r.name AS customer_name, r.phone AS customer_phone, 
                      (SELECT phone FROM admins ORDER BY id ASC LIMIT 1) AS admin_phone 
               FROM requests r
               WHERE r.id = ?";
@@ -30,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    $customer_name = $row['customer_name'];
     $customer_phone = $row['customer_phone'];
     $admin_phone = $row['admin_phone'];
 
@@ -39,23 +50,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_bind_param($updateStmt, "si", $new_status, $request_id);
     
     if (mysqli_stmt_execute($updateStmt)) {
-        // Initialize Africa’s Talking API
-        $username = "your_username"; // Replace with your Africa's Talking username
-        $apiKey = "your_api_key"; // Replace with your API key
-        $gateway = new AfricasTalkingGateway($username, $apiKey);
+        // Sender ID (optional, must be approved)
+        $from = "AFRICASTKNG";
 
-        if ($new_status == "Accepted") {
-            // Send SMS to the customer
-            $messageToCustomer = "Your request has been accepted. The driver is on the way!";
-            $gateway->sendMessage($customer_phone, $messageToCustomer);
+        try {
+            if ($new_status == "Accepted") {
+                // Send SMS to the customer including their name
+                $messageToCustomer = "Hello $customer_name, your request has been accepted. The driver is on the way!";
+                $sms->send([
+                    'to'      => $customer_phone,
+                    'message' => $messageToCustomer,
+                    'from'    => $from
+                ]);
 
-            // Notify admin
-            $messageToAdmin = "Request #$request_id has been accepted by a driver.";
-            $gateway->sendMessage($admin_phone, $messageToAdmin);
-        } elseif ($new_status == "Declined") {
-            // Notify admin so they can reassign
-            $messageToAdmin = "Request #$request_id was declined. Please assign another driver.";
-            $gateway->sendMessage($admin_phone, $messageToAdmin);
+                // Notify admin
+                $messageToAdmin = "Request #$request_id has been accepted by a driver.";
+                $sms->send([
+                    'to'      => $admin_phone,
+                    'message' => $messageToAdmin,
+                    'from'    => $from
+                ]);
+
+            } elseif ($new_status == "Declined") {
+                // Notify admin so they can reassign
+                $messageToAdmin = "Request #$request_id was declined. Please assign another driver.";
+                $sms->send([
+                    'to'      => $admin_phone,
+                    'message' => $messageToAdmin,
+                    'from'    => $from
+                ]);
+            }
+        } catch (Exception $e) {
+            echo "Error sending SMS: " . $e->getMessage();
         }
 
         header("Location: ../driver_requests.php");

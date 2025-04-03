@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
 session_start();
 include 'php/db.php'; // Ensure this file contains your database connection
 require 'vendor/autoload.php'; // Load Africa's Talking SDK
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($problem_description)) $errors[] = "Problem description is required";
 
     // Phone number validation (optional, adjust as needed)
-    if (!preg_match('/^[0-9]{10}$/', $phone)) {
+    if (!preg_match('/^[0-9]{13}$/', $phone)) {
         $errors[] = "Invalid phone number format";
     }
 
@@ -86,11 +87,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Send SMS to the admin
                     try {
-                        $sms->send([
+                        $response = $sms->send([
                             'to'      => $admin_phone,
                             'message' => $adminMessage,
                             'from'    => "AFRICASTKNG"
                         ]);
+                        
+                        // Log the response from Africa's Talking API
+                        error_log("SMS Response: " . print_r($response, true));
                     } catch (Exception $e) {
                         error_log("Error sending SMS: " . $e->getMessage());
                     }
@@ -102,13 +106,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     // Database insertion failed
                     $_SESSION['error_message'] = "Failed to submit request. Please try again.";
-                    header("Location: index.html");
+                    header("Location: request-service.php");
                     exit();
                 }
             } catch (Exception $e) {
                 // Handle any exceptions
                 $_SESSION['error_message'] = "An error occurred: " . $e->getMessage();
-                header("Location: request_form.php");
+                header("Location: request-service.php");
                 exit();
             } finally {
                 // Close statement
@@ -117,19 +121,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Statement preparation failed
             $_SESSION['error_message'] = "Database error. Please try again later.";
-            header("Location: request_form.php");
+            header("Location: request-service.php");
             exit();
         }
     } else {
         // Validation failed
         $_SESSION['error_messages'] = $errors;
-        header("Location: request_form.php");
+        header("Location: request-service.php");
         exit();
     }
 } else {
     // Direct access to the script
     $_SESSION['error_message'] = "Invalid access method.";
-    header("Location: request_form.php");
+    header("Location: request-service.php");
     exit();
 }
 ?>

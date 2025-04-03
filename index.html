@@ -68,7 +68,7 @@
               </form>
             </ul>
             <div class="buttons">
-                <button class="btn btn-primary" onclick="redirectToDriverLogin()">Driver</button>
+                <button class="btn btn-primary" onclick="document.getElementById('request').scrollIntoView({ behavior: 'smooth' });">Request</button>
                 <button class="btn btn-primary" onclick="window.location.href='login.html'">Login</button>
             </div>
           </div>
@@ -255,7 +255,7 @@
         <div class="col-md-10 mx-auto">
           <div class="form_tab_container">
             <div class="section-heading text-center mb-4">
-              <h2 class="h1 text-white">Vehicle Service Request</h2>
+              <h2 class="h1 text-white" id="request">Vehicle Service Request</h2>
                <p class="lead text-white">Fill out the details for your vehicle service</p>
 
             </div>
