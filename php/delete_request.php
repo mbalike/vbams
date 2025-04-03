@@ -1,5 +1,6 @@
 <?php
 include('db.php');
+include('php/auth.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['request_id'])) {
     $request_id = $_POST['request_id'];

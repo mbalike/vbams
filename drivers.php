@@ -7,7 +7,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Fetch drivers from the database
 $query = "SELECT * FROM drivers";
 $result = mysqli_query($conn, $query);
-
+include('php/auth.php');
 if (!$result) {
     die('Error fetching drivers: ' . mysqli_error($conn));
 }

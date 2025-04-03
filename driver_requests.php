@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('php/auth.php');
 include('php/db.php');
+include('php/auth.php');
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {
     header("Location: ../login.php");

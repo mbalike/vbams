@@ -69,3 +69,30 @@ Array
         )
 
 )
+Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_80b378bfc238c1765d734e9392c94679
+                                    [messageParts] => 1
+                                    [number] => +255742398600
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)

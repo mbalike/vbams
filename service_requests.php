@@ -1,11 +1,12 @@
 <?php
+include('php/db.php');
+include('php/auth.php');
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 $current_page = basename($_SERVER['PHP_SELF']); 
 
-include('php/auth.php');
-include('php/db.php');
 
 // Fetch service requests from the database
 $query = "SELECT * FROM requests";
