@@ -57,7 +57,7 @@ $result = mysqli_stmt_get_result($stmt);
     <!-- Sidebar -->
     <div class="sidebar">
         <h3>Driver Panel</h3>
-        <a href="driver_requests.php">My Requests</a>
+        <a href="driver_requests2.php">My Requests</a>
         <a href="profile.php">Profile</a>
         <a href="php/logout.php">Logout</a>
     </div>
