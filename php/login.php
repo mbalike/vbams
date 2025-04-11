@@ -10,7 +10,7 @@ if (isset($_SESSION['user_id'])) {
         header("Location: ../dashboard.php");
         exit();
     } elseif ($_SESSION['role'] == 'driver') {
-        header("Location: ../driver_requests.php");
+        header("Location: ../driver_requests2.php");
         exit();
     }
 }
