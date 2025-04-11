@@ -38,3 +38,389 @@
 [2025-04-11 10:46:12] SMS delivery failed with status: InsufficientBalance - No reason provided
 [2025-04-11 10:46:12] Database transaction committed successfully
 [2025-04-11 10:46:12] Redirecting to service_requests.php
+[2025-04-11 11:18:01] Driver assignment script started
+[2025-04-11 11:18:01] Processing assignment request: Driver ID 5 to Request ID 42
+[2025-04-11 11:18:01] Database transaction started
+[2025-04-11 11:18:01] Updated request status to 'Assigned' for request #42
+[2025-04-11 11:18:01] Updated driver #5 status to 'Busy'
+[2025-04-11 11:18:01] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-11 11:18:01] Request details - Location: Hisia Kwanza, Customer: Gadafi Japhaly (255742398600)
+[2025-04-11 11:18:01] Formatted driver phone: +255742398600
+[2025-04-11 11:18:01] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Hisia Kwanza. Client: Gadafi Japhaly (255742398600). Car: Mazda CX-5. Issue: dfdfd.
+[2025-04-11 11:18:01] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 11:18:03] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 11:18:03] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-11 11:18:03] Database transaction committed successfully
+[2025-04-11 11:18:03] Redirecting to service_requests.php
+[2025-04-11 13:01:45] Driver assignment script started
+[2025-04-11 13:01:45] Processing assignment request: Driver ID 1 to Request ID 43
+[2025-04-11 13:01:45] Database transaction started
+[2025-04-11 13:01:45] Updated request status to 'Assigned' for request #43
+[2025-04-11 13:01:46] Updated driver #1 status to 'Busy'
+[2025-04-11 13:01:46] Driver details - Name: Bunastar Vina, Phone: 0712131415
+[2025-04-11 13:01:46] Request details - Location: Hisia Kwanza, Customer: Bunastar Vina OBE (+255742398600)
+[2025-04-11 13:01:46] Formatted driver phone: +712131415
+[2025-04-11 13:01:46] Preparing to send SMS with message: Hello Bunastar Vina, new service request at Hisia Kwanza. Client: Bunastar Vina OBE (+255742398600). Car: Mazda CX-5. Issue: gcgvhgvj.
+[2025-04-11 13:01:46] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:01:47] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +712131415
+                                    [status] => InvalidPhoneNumber
+                                    [statusCode] => 403
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:01:47] SMS delivery failed with status: InvalidPhoneNumber - No reason provided
+[2025-04-11 13:01:47] Database transaction committed successfully
+[2025-04-11 13:01:47] Redirecting to service_requests.php
+[2025-04-11 13:02:38] Driver assignment script started
+[2025-04-11 13:02:38] Processing assignment request: Driver ID 1 to Request ID 43
+[2025-04-11 13:02:38] Database transaction started
+[2025-04-11 13:02:38] Updated request status to 'Assigned' for request #43
+[2025-04-11 13:02:38] Updated driver #1 status to 'Busy'
+[2025-04-11 13:02:38] Driver details - Name: Bunastar Vina, Phone: 0712131415
+[2025-04-11 13:02:38] Request details - Location: Hisia Kwanza, Customer: Bunastar Vina OBE (+255742398600)
+[2025-04-11 13:02:38] Formatted driver phone: +712131415
+[2025-04-11 13:02:38] Preparing to send SMS with message: Hello Bunastar Vina, new service request at Hisia Kwanza. Client: Bunastar Vina OBE (+255742398600). Car: Mazda CX-5. Issue: gcgvhgvj.
+[2025-04-11 13:02:38] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:02:39] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +712131415
+                                    [status] => InvalidPhoneNumber
+                                    [statusCode] => 403
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:02:39] SMS delivery failed with status: InvalidPhoneNumber - No reason provided
+[2025-04-11 13:02:39] Database transaction committed successfully
+[2025-04-11 13:02:39] Redirecting to service_requests.php
+[2025-04-11 13:05:51] Driver assignment script started
+[2025-04-11 13:05:51] Processing assignment request: Driver ID 1 to Request ID 44
+[2025-04-11 13:05:51] Database transaction started
+[2025-04-11 13:05:51] Updated request status to 'Assigned' for request #44
+[2025-04-11 13:05:51] Updated driver #1 status to 'Busy'
+[2025-04-11 13:05:51] Driver details - Name: Bunastar Vina, Phone: 0712131415
+[2025-04-11 13:05:51] Request details - Location: Mwenge Mpakani, Customer: David A. Mbalike (+255742398600)
+[2025-04-11 13:05:51] Formatted driver phone: +712131415
+[2025-04-11 13:05:51] Preparing to send SMS with message: Hello Bunastar Vina, new service request at Mwenge Mpakani. Client: David A. Mbalike (+255742398600). Car: Mazda CX-5. Issue: sfbashfsakh.
+[2025-04-11 13:05:51] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:05:53] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +712131415
+                                    [status] => InvalidPhoneNumber
+                                    [statusCode] => 403
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:05:53] SMS delivery failed with status: InvalidPhoneNumber - No reason provided
+[2025-04-11 13:05:53] Database transaction committed successfully
+[2025-04-11 13:05:53] Redirecting to service_requests.php
+[2025-04-11 13:06:16] Driver assignment script started
+[2025-04-11 13:06:16] Processing assignment request: Driver ID 5 to Request ID 43
+[2025-04-11 13:06:16] Database transaction started
+[2025-04-11 13:06:16] Updated request status to 'Assigned' for request #43
+[2025-04-11 13:06:16] Updated driver #5 status to 'Busy'
+[2025-04-11 13:06:16] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-11 13:06:16] Request details - Location: Hisia Kwanza, Customer: Bunastar Vina OBE (+255742398600)
+[2025-04-11 13:06:16] Formatted driver phone: +255742398600
+[2025-04-11 13:06:16] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Hisia Kwanza. Client: Bunastar Vina OBE (+255742398600). Car: Mazda CX-5. Issue: gcgvhgvj.
+[2025-04-11 13:06:16] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:06:16] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:06:16] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-11 13:06:16] Database transaction committed successfully
+[2025-04-11 13:06:16] Redirecting to service_requests.php
+[2025-04-11 13:11:56] Driver assignment script started
+[2025-04-11 13:11:56] Processing assignment request: Driver ID 5 to Request ID 45
+[2025-04-11 13:11:56] Database transaction started
+[2025-04-11 13:11:56] Updated request status to 'Assigned' for request #45
+[2025-04-11 13:11:56] Updated driver #5 status to 'Busy'
+[2025-04-11 13:11:56] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-11 13:11:56] Request details - Location: Mwenge Mpakani, Customer: David A. Mbalike (+255742398600)
+[2025-04-11 13:11:56] Formatted driver phone: +255742398600
+[2025-04-11 13:11:56] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Mwenge Mpakani. Client: David A. Mbalike (+255742398600). Car: Mazda CX-5. Issue: hhgh.
+[2025-04-11 13:11:56] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:11:58] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:11:58] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-11 13:11:58] Database transaction committed successfully
+[2025-04-11 13:11:58] Redirecting to service_requests.php
+[2025-04-11 13:12:11] Driver assignment script started
+[2025-04-11 13:12:11] Processing assignment request: Driver ID 5 to Request ID 44
+[2025-04-11 13:12:11] Database transaction started
+[2025-04-11 13:12:11] Updated request status to 'Assigned' for request #44
+[2025-04-11 13:12:11] Updated driver #5 status to 'Busy'
+[2025-04-11 13:12:11] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-11 13:12:11] Request details - Location: Mwenge Mpakani, Customer: David A. Mbalike (+255742398600)
+[2025-04-11 13:12:11] Formatted driver phone: +255742398600
+[2025-04-11 13:12:11] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Mwenge Mpakani. Client: David A. Mbalike (+255742398600). Car: Mazda CX-5. Issue: sfbashfsakh.
+[2025-04-11 13:12:11] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:12:12] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:12:12] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-11 13:12:12] Database transaction committed successfully
+[2025-04-11 13:12:12] Redirecting to service_requests.php
+[2025-04-11 13:12:23] Driver assignment script started
+[2025-04-11 13:12:23] Processing assignment request: Driver ID 5 to Request ID 37
+[2025-04-11 13:12:23] Database transaction started
+[2025-04-11 13:12:23] Updated request status to 'Assigned' for request #37
+[2025-04-11 13:12:23] Updated driver #5 status to 'Busy'
+[2025-04-11 13:12:23] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-11 13:12:23] Request details - Location: Test Location, Customer: Test User (254712345678)
+[2025-04-11 13:12:23] Formatted driver phone: +255742398600
+[2025-04-11 13:12:23] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Test Location. Client: Test User (254712345678). Car: Toyota Corolla. Issue: Flat tire.
+[2025-04-11 13:12:23] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 13:12:36] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:12:36] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-11 13:12:36] Database transaction committed successfully
+[2025-04-11 13:12:36] Redirecting to service_requests.php
+[2025-04-11 13:16:49] Driver status update script started
+[2025-04-11 13:16:49] Processing status update - Request ID: 45, New Status: Accepted
+[2025-04-11 13:16:49] Retrieved data - Customer: David A. Mbalike (+255742398600), Admin phone: 255742398600
+[2025-04-11 13:16:49] Formatted admin phone: +255742398600
+[2025-04-11 13:16:49] Successfully updated request #45 status to 'Accepted'
+[2025-04-11 13:16:49] Preparing to send customer notification: Hello David A. Mbalike, your request has been accepted. The driver is on the way!
+[2025-04-11 13:16:49] Sending SMS to customer (+255742398600)...
+[2025-04-11 13:16:50] Customer SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:16:50] SMS to customer failed: InsufficientBalance - No reason provided
+[2025-04-11 13:16:50] Preparing to send admin notification: Request #45 has been accepted by a driver.
+[2025-04-11 13:16:50] Sending SMS to admin (+255742398600)...
+[2025-04-11 13:16:50] Admin SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 13:16:50] SMS to admin failed: InsufficientBalance - No reason provided
+[2025-04-11 13:16:50] Redirecting to driver_requests2.php

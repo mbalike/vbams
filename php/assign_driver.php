@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         try {
             // Assign driver to request & update status to 'Assigned'
-            $query1 = "UPDATE requests SET assigned_driver_id = ?, status = 'Assigned' WHERE id = ?";
+            $query1 = "UPDATE requests SET assigned_driver_id = ?, status = 'Pending' WHERE id = ?";
             $stmt1 = mysqli_prepare($conn, $query1);
             mysqli_stmt_bind_param($stmt1, "ii", $driver_id, $request_id);
             mysqli_stmt_execute($stmt1);

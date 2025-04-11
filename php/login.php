@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: ../dashboard.php");
                 exit();
             } elseif ($user['role'] == 'driver') {
-                header("Location: ../driver_requests.php");
+                header("Location: ../driver_requests2.php");
                 exit();
             }
         } else {

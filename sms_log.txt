@@ -56,3 +56,36 @@
 )
 
 [2025-04-11 10:27:51] SMS sent successfully to admin. MessageId: ATXid_9865c704c2caa2c998db6a4b649ca18e
+[2025-04-11 11:09:48] New service request #45 created for customer: David A. Mbalike (+255742398600)
+[2025-04-11 11:09:48] Original admin phone: 255742398600
+[2025-04-11 11:09:48] Formatted admin phone: +255742398600
+[2025-04-11 11:09:48] Preparing to send SMS to admin with message: New service request #45 from David A. Mbalike at Mwenge Mpakani. Car: Mazda CX-5. Issue: hhgh. Contact: +255742398600.
+[2025-04-11 11:09:48] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 11:09:49] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 11:09:49] SMS delivery failed with status: InsufficientBalance - No reason provided
