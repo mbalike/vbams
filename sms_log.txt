@@ -1,0 +1,58 @@
+[2025-04-11 10:19:42] New service request #43 created for customer: Bunastar Vina OBE (+255742398600)
+[2025-04-11 10:19:43] Original admin phone: 255742398600
+[2025-04-11 10:19:43] Formatted admin phone: +255742398600
+[2025-04-11 10:19:43] Preparing to send SMS to admin with message: New service request #43 from Bunastar Vina OBE at Hisia Kwanza. Car: Mazda CX-5. Issue: gcgvhgvj. Contact: +255742398600.
+[2025-04-11 10:19:43] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 10:19:44] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => InvalidSenderId
+                    [Recipients] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 10:19:44] SMS send API returned an unexpected response format
+[2025-04-11 10:27:50] New service request #44 created for customer: David A. Mbalike (+255742398600)
+[2025-04-11 10:27:50] Original admin phone: 255742398600
+[2025-04-11 10:27:50] Formatted admin phone: +255742398600
+[2025-04-11 10:27:50] Preparing to send SMS to admin with message: New service request #44 from David A. Mbalike at Mwenge Mpakani. Car: Mazda CX-5. Issue: sfbashfsakh. Contact: +255742398600.
+[2025-04-11 10:27:50] Attempting to send SMS via Africa's Talking API...
+[2025-04-11 10:27:51] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_9865c704c2caa2c998db6a4b649ca18e
+                                    [messageParts] => 1
+                                    [number] => +255742398600
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-11 10:27:51] SMS sent successfully to admin. MessageId: ATXid_9865c704c2caa2c998db6a4b649ca18e
