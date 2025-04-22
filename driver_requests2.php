@@ -388,9 +388,7 @@ $result = mysqli_stmt_get_result($stmt);
         <a href="driver_requests2.php" class="<?= ($current_page == 'driver_requests2.php') ? 'active' : '' ?>">
             <i class="fas fa-clipboard-list"></i> My Requests
         </a>
-        <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
-            <i class="fas fa-cog"></i> Settings
-        </a>
+        
         <a href="php/logout.php">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
@@ -464,6 +462,19 @@ $result = mysqli_stmt_get_result($stmt);
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sidebar toggle functionality
+            var toggleButton = document.getElementById("toggleSidebar");
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("content");
+
+            toggleButton.addEventListener("click", function () {
+                sidebar.classList.toggle("hidden");
+                content.classList.toggle("full-width");
+            })});
+    </script>
     </body>
 </html>
 <?php mysqli_close($conn); ?>

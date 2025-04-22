@@ -424,3 +424,149 @@
 
 [2025-04-11 13:16:50] SMS to admin failed: InsufficientBalance - No reason provided
 [2025-04-11 13:16:50] Redirecting to driver_requests2.php
+[2025-04-22 08:17:47] Driver assignment script started
+[2025-04-22 08:17:47] Processing assignment request: Driver ID 1 to Request ID 41
+[2025-04-22 08:17:47] Database transaction started
+[2025-04-22 08:17:47] Updated request status to 'Assigned' for request #41
+[2025-04-22 08:17:47] Updated driver #1 status to 'Busy'
+[2025-04-22 08:17:47] Driver details - Name: Bunastar Vina, Phone: 0712131415
+[2025-04-22 08:17:47] Request details - Location: Mwenge Mpakani, Customer: Gadafi Japhaly (+255742398600)
+[2025-04-22 08:17:47] Formatted driver phone: +712131415
+[2025-04-22 08:17:47] Preparing to send SMS with message: Hello Bunastar Vina, new service request at Mwenge Mpakani. Client: Gadafi Japhaly (+255742398600). Car: IST. Issue: gari haiwaki.
+[2025-04-22 08:17:47] Attempting to send SMS via Africa's Talking API...
+[2025-04-22 08:17:48] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +712131415
+                                    [status] => InvalidPhoneNumber
+                                    [statusCode] => 403
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-22 08:17:48] SMS delivery failed with status: InvalidPhoneNumber - No reason provided
+[2025-04-22 08:17:48] Database transaction committed successfully
+[2025-04-22 08:17:48] Redirecting to service_requests.php
+[2025-04-22 08:18:08] Driver assignment script started
+[2025-04-22 08:18:08] Processing assignment request: Driver ID 1 to Request ID 42
+[2025-04-22 08:18:08] Database transaction started
+[2025-04-22 08:18:08] Updated request status to 'Assigned' for request #42
+[2025-04-22 08:18:08] Updated driver #1 status to 'Busy'
+[2025-04-22 08:18:08] Driver details - Name: Bunastar Vina, Phone: 0712131415
+[2025-04-22 08:18:08] Request details - Location: Hisia Kwanza, Customer: Gadafi Japhaly (255742398600)
+[2025-04-22 08:18:08] Formatted driver phone: +712131415
+[2025-04-22 08:18:08] Preparing to send SMS with message: Hello Bunastar Vina, new service request at Hisia Kwanza. Client: Gadafi Japhaly (255742398600). Car: Mazda CX-5. Issue: dfdfd.
+[2025-04-22 08:18:08] Attempting to send SMS via Africa's Talking API...
+[2025-04-22 08:18:09] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +712131415
+                                    [status] => InvalidPhoneNumber
+                                    [statusCode] => 403
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-22 08:18:09] SMS delivery failed with status: InvalidPhoneNumber - No reason provided
+[2025-04-22 08:18:09] Database transaction committed successfully
+[2025-04-22 08:18:09] Redirecting to service_requests.php
+[2025-04-22 08:18:41] Driver status update script started
+[2025-04-22 08:18:41] Processing status update - Request ID: 41, New Status: Accepted
+[2025-04-22 08:18:41] Retrieved data - Customer: Gadafi Japhaly (+255742398600), Admin phone: 255742398600
+[2025-04-22 08:18:41] Formatted admin phone: +255742398600
+[2025-04-22 08:18:41] Successfully updated request #41 status to 'Accepted'
+[2025-04-22 08:18:41] Preparing to send customer notification: Hello Gadafi Japhaly, your request has been accepted. The driver is on the way!
+[2025-04-22 08:18:41] Sending SMS to customer (+255742398600)...
+[2025-04-22 08:18:42] Customer SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-22 08:18:42] SMS to customer failed: InsufficientBalance - No reason provided
+[2025-04-22 08:18:42] Preparing to send admin notification: Request #41 has been accepted by a driver.
+[2025-04-22 08:18:42] Sending SMS to admin (+255742398600)...
+[2025-04-22 08:18:42] Admin SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 0/1 Total Cost: 0
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => 0
+                                    [messageId] => None
+                                    [number] => +255742398600
+                                    [status] => InsufficientBalance
+                                    [statusCode] => 405
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-22 08:18:42] SMS to admin failed: InsufficientBalance - No reason provided
+[2025-04-22 08:18:42] Redirecting to driver_requests2.php
