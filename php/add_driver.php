@@ -9,8 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $location = mysqli_real_escape_string($conn, $_POST['location']);
 
-    $query = "INSERT INTO drivers (name, phone, email, availability_status) VALUES ('$name', '$phone', '$email', 'Offline')";
+    $query = "INSERT INTO drivers (name, phone, email, location, availability_status) VALUES ('$name', '$phone', '$email', '$location', 'Offline')";
     
     if (mysqli_query($conn, $query)) {
         header("Location: ../drivers2.php?success=Driver added successfully");

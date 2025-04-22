@@ -454,9 +454,15 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             
                             <td>
                                 
-                                <button class="btn action-btn btn-update" data-bs-toggle="modal" data-bs-target="#updateDriver" data-id="<?= $row['id'] ?>">
-                                    <i class="fas fa-edit"></i> Update
-                                </button>
+                            <button class="btn action-btn btn-update" data-bs-toggle="modal" data-bs-target="#updateDriver" 
+                                data-id="<?= $row['id'] ?>"
+                                data-name="<?= $row['name'] ?>"
+                                data-phone="<?= $row['phone'] ?>"
+                                data-email="<?= $row['email'] ?>"
+                                data-location="<?= $row['location'] ?>"
+                                data-status="<?= $row['availability_status'] ?>">
+                                <i class="fas fa-edit"></i> Update
+                            </button>
                                 <button class="btn action-btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteDriver" data-id="<?= $row['id'] ?>">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
@@ -518,8 +524,8 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             <input type="email" name="email" id="edit_driver_email" class="form-control">        
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"></label>
-                            <input type="email" name="email" id="edit_driver_email" class="form-control">        
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" id="edit_driver_location" class="form-control">        
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Availability Status</label>
@@ -558,6 +564,10 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" required>
+                    </div>
                     <button type="submit" class="btn btn-primary">Add Driver</button>
                 </form>
             </div>
@@ -588,13 +598,14 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
             
             // Modal functionality for edit Driver
             
-            var editDriver = document.getElementById('editDriver');
+            var editDriver = document.getElementById('updateDriver');
             editDriver.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
                 
                 document.getElementById("edit_driver_id").value = button.getAttribute("data-id");
                 document.getElementById("edit_driver_name").value = button.getAttribute("data-name");
                 document.getElementById("edit_driver_phone").value = button.getAttribute("data-phone");
+                document.getElementById("edit_driver_location").value = button.getAttribute("data-location");
                 document.getElementById("edit_driver_email").value = button.getAttribute("data-email");
                 document.getElementById("edit_driver_status").value = button.getAttribute("data-status");
             });
