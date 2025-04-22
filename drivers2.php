@@ -518,6 +518,10 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             <input type="email" name="email" id="edit_driver_email" class="form-control">        
                         </div>
                         <div class="mb-3">
+                            <label class="form-label"></label>
+                            <input type="email" name="email" id="edit_driver_email" class="form-control">        
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Availability Status</label>
                             <select name="status" id="edit_driver_status" class="form-control">
                                 <option value="Available">Available</option>
