@@ -430,6 +430,7 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
                             <td><strong><?= $row['id'] ?></strong></td>
                             <td><?= $row['name'] ?></td>
                             <td><?= $row['phone'] ?></td>
+                            <td><?= $row['location'] ?></td>
                             <td><?= $row['email'] ?></td>
                             <td>
                                 <?php
