@@ -570,3 +570,23 @@
 
 [2025-04-22 08:18:42] SMS to admin failed: InsufficientBalance - No reason provided
 [2025-04-22 08:18:42] Redirecting to driver_requests2.php
+[2025-04-22 12:31:53] Driver status update script started
+[2025-04-22 12:31:53] Processing status update - Request ID: 30, New Status: Completed
+[2025-04-22 12:31:53] Retrieved data - Customer: Tina Nasser (0786543212), Admin phone: 255742398600
+[2025-04-22 12:31:53] Formatted customer phone: +786543212
+[2025-04-22 12:31:53] Formatted admin phone: +255742398600
+[2025-04-22 12:31:53] Successfully updated request #30 status to 'Completed'
+[2025-04-22 12:31:53] Redirecting to driver_requests2.php
+[2025-04-22 12:31:55] Driver status update script started
+[2025-04-22 12:31:55] Processing status update - Request ID: 29, New Status: Completed
+[2025-04-22 12:31:55] Retrieved data - Customer: Hassan Mwinyi (0798765432), Admin phone: 255742398600
+[2025-04-22 12:31:55] Formatted customer phone: +798765432
+[2025-04-22 12:31:55] Formatted admin phone: +255742398600
+[2025-04-22 12:31:55] Successfully updated request #29 status to 'Completed'
+[2025-04-22 12:31:55] Redirecting to driver_requests2.php
+[2025-04-22 12:32:00] Driver status update script started
+[2025-04-22 12:32:00] Processing status update - Request ID: 43, New Status: Completed
+[2025-04-22 12:32:00] Retrieved data - Customer: Bunastar Vina OBE (+255742398600), Admin phone: 255742398600
+[2025-04-22 12:32:00] Formatted admin phone: +255742398600
+[2025-04-22 12:32:00] Successfully updated request #43 status to 'Completed'
+[2025-04-22 12:32:00] Redirecting to driver_requests2.php
