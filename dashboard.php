@@ -358,12 +358,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
         <a href="drivers2.php" class="<?= ($current_page == 'drivers2.php') ? 'active' : '' ?>">
             <i class="fas fa-user-tie"></i> Drivers
         </a>
-        <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">
-            <i class="fas fa-chart-bar"></i> Reports
-        </a>
-        <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
-            <i class="fas fa-cog"></i> Settings
-        </a>
+        
         <a href="php/logout.php">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
@@ -961,12 +956,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
         <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">
             <i class="fas fa-user-tie"></i> Drivers
         </a>
-        <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">
-            <i class="fas fa-chart-bar"></i> Reports
-        </a>
-        <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
-            <i class="fas fa-cog"></i> Settings
-        </a>
+        
         <a href="php/logout.php">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
