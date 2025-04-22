@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        #map {
+            height: 300px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+        .location-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        #locationDisplay {
+            font-style: italic;
+            color: #777;
+        }
+        .location-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .location-buttons button {
+            flex: 1;
+        }
+        #getCurrentLocation {
+            background-color: #34a853;
+        }
+        #getCurrentLocation:hover {
+            background-color: #2e8f49;
+        }
+        .map-placeholder {
+            height: 300px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Data Form</h1>
+        <form id="userDataForm">
+            <div class="form-group">
+                <label for="id">ID:</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="car_model">Car Model:</label>
+                <input type="text" id="car_model" name="car_model" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Location:</label>
+                <div class="location-buttons">
+                    <button type="button" id="getCurrentLocation">Use My Current Location</button>
+                </div>
+                <div id="map"></div>
+                <div class="location-info">
+                    <p>Selected location: <span id="locationDisplay">No location selected</span></p>
+                    <input type="hidden" id="location" name="location">
+                    <input type="hidden" id="lat" name="lat">
+                    <input type="hidden" id="lng" name="lng">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="problem_description">Problem Description:</label>
+                <textarea id="problem_description" name="problem_description" required></textarea>
+            </div>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        let map;
+        let marker;
+
+        // Initialize the map when the page loads
+        function initializeMap() {
+            // Check if the Maps API is loaded
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                document.getElementById('map').innerHTML = '<div class="AIzaSyA1B2cDeFgHiJkLmNoPqRsT3uVwXyZ4567">To use this feature, please add a valid Google Maps API key.</div>';
+                return;
+            }
+
+            // Default location (center of map)
+            const defaultLocation = { lat: 37.7749, lng: -122.4194 }; // San Francisco
+            
+            // Create map
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: defaultLocation,
+                zoom: 12,
+                mapTypeControl: true,
+                streetViewControl: false
+            });
+            
+            // Create marker using AdvancedMarkerElement (newer API)
+            if (google.maps.marker && google.maps.marker.AdvancedMarkerElement) {
+                marker = new google.maps.marker.AdvancedMarkerElement({
+                    map: null, // Initially hidden
+                    position: defaultLocation,
+                    draggable: true
+                });
+                
+                // Add event listeners
+                if (marker.addListener) {
+                    marker.addListener("dragend", () => {
+                        updateLocationInfo(marker.position);
+                    });
+                }
+            } else {
+                // Fallback to regular Marker if AdvancedMarkerElement is not available
+                marker = new google.maps.Marker({
+                    position: defaultLocation,
+                    map: null, // Initially hidden
+                    draggable: true
+                });
+                
+                marker.addListener("dragend", () => {
+                    updateLocationInfo(marker.getPosition());
+                });
+            }
+            
+            // Add click event to the map
+            map.addListener("click", (event) => {
+                placeMarker(event.latLng);
+            });
+            
+            // Setup geolocation button
+            document.getElementById("getCurrentLocation").addEventListener("click", getCurrentLocation);
+        }
+        
+        // Place or move marker to a location
+        function placeMarker(location) {
+            if (google.maps.marker && google.maps.marker.AdvancedMarkerElement) {
+                marker.position = location;
+                marker.map = map;
+            } else {
+                marker.setPosition(location);
+                marker.setMap(map);
+            }
+            
+            map.panTo(location);
+            updateLocationInfo(location);
+        }
+        
+        // Get current location using browser geolocation
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        placeMarker(pos);
+                        map.setZoom(15);
+                    },
+                    () => {
+                        alert("Error: The Geolocation service failed.");
+                    }
+                );
+            } else {
+                alert("Error: Your browser doesn't support geolocation.");
+            }
+        }
+        
+        // Update location display and form fields
+        function updateLocationInfo(location) {
+            // Get lat/lng values, handling different marker types
+            let lat, lng;
+            if (typeof location.lat === 'function') {
+                lat = location.lat();
+                lng = location.lng();
+            } else {
+                lat = location.lat;
+                lng = location.lng;
+            }
+            
+            // Update form fields with coordinates
+            document.getElementById("lat").value = lat;
+            document.getElementById("lng").value = lng;
+            
+            // Use reverse geocoding to get the address
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    const address = results[0].formatted_address;
+                    document.getElementById("locationDisplay").textContent = address;
+                    document.getElementById("location").value = address;
+                } else {
+                    document.getElementById("locationDisplay").textContent = 
+                        `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+                    document.getElementById("location").value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+                }
+            });
+        }
+        
+        // Handle form submission
+        document.getElementById("userDataForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Check if location is selected
+            if (!document.getElementById("location").value) {
+                alert("Please select a location on the map.");
+                return;
+            }
+            
+            // Get all form data
+            const formData = {
+                id: document.getElementById("id").value,
+                name: document.getElementById("name").value,
+                phone: document.getElementById("phone").value,
+                car_model: document.getElementById("car_model").value,
+                location: document.getElementById("location").value,
+                coordinates: {
+                    lat: document.getElementById("lat").value,
+                    lng: document.getElementById("lng").value
+                },
+                problem_description: document.getElementById("problem_description").value
+            };
+            
+            // Here you can send the data to your server
+            console.log("Form data:", formData);
+            alert("Form submitted successfully!");
+            
+            // In a real application, you would send this data to your backend
+            // Example using fetch:
+            /*
+            fetch('your-api-endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Form submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error submitting form. Please try again.');
+            });
+            */
+        });
+    </script>
+    
+    <!-- To use this form with Google Maps, you'll need to:
+    1. Get an API key from https://developers.google.com/maps/documentation/javascript/get-api-key
+    2. Enable the Maps JavaScript API and Geocoding API in your Google Cloud Console
+    3. Replace YOUR_API_KEY below with your actual API key
+    4. Uncomment the script tag below
+    -->
+    
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initializeMap" async defer></script> -->
+    
+    <script>
+        // Initialize the map placeholder if Google Maps API is not loaded
+        window.addEventListener('load', function() {
+            // Check if the Maps API is loaded
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                document.getElementById('map').innerHTML = '<div class="map-placeholder">Please add a valid Google Maps API key in the HTML code.</div>';
+            }
+        });
+    </script>
+</body>
+</html>
