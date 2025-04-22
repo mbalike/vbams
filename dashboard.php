@@ -545,7 +545,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
                         </div>
                     <?php endwhile; ?>
                     <div class="text-center mt-3">
-                        <a href="drivers.php" class="btn btn-sm btn-primary">View All Drivers</a>
+                        <a href="drivers2.php" class="btn btn-sm btn-primary">View All Drivers</a>
                     </div>
                 </div>
             </div>
@@ -953,7 +953,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
         <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">
             <i class="fas fa-clipboard-list"></i> Service Requests
         </a>
-        <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">
+        <a href="drivers2.php" class="<?= ($current_page == 'drivers2.php') ? 'active' : '' ?>">
             <i class="fas fa-user-tie"></i> Drivers
         </a>
         
@@ -1143,7 +1143,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
                         </div>
                     <?php endwhile; ?>
                     <div class="text-center mt-3">
-                        <a href="drivers.php" class="btn btn-sm btn-primary">View All Drivers</a>
+                        <a href="drivers2.php" class="btn btn-sm btn-primary">View All Drivers</a>
                     </div>
                 </div>
             </div>
@@ -1276,7 +1276,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
         <h4>Admin Panel</h4>
         <a href="dashboard.php">Dashboard</a>
         <a href="service_requests.php">Service Requests</a>
-        <a href="drivers.php">Drivers</a>
+        <a href="drivers2.php">Drivers</a>
         <a href="#">Reports</a>
         <a href="#">Settings</a>
         <a href="php/logout.php">Logout</a>
@@ -1298,104 +1298,3 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
     </script>
 </body>
 </html>
-<?php mysqli_close($conn); ?>
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-            
-            // Driver Status Chart
-            var driverCtx = document.getElementById('driverStatusChart').getContext('2d');
-            var driverStatusChart = new Chart(driverCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Available', 'Busy', 'Offline'],
-                    datasets: [{
-                        data: [<?= $available_drivers ?>, <?= $busy_drivers ?>, <?= $offline_drivers ?>],
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.8)',  // Available (green)
-                            'rgba(255, 159, 64, 0.8)',  // Busy (orange)
-                            'rgba(201, 203, 207, 0.8)'  // Offline (grey)
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(201, 203, 207, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {<?php
-  include('php/db.php');
-  include('php/auth.php');
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: #343a40;
-            color: white;
-            padding: 20px;
-            position: fixed;
-        }
-        .sidebar a {
-            color: white;
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background: #495057;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <h4>Admin Panel</h4>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="service_requests.php">Service Requests</a>
-        <a href="drivers.php">Drivers</a>
-        <a href="#">Reports</a>
-        <a href="#">Settings</a>
-        <a href="php/logout.php">Logout</a>
-    </div>
-    
-    <div class="content">
-        <h2>Welcome, Admin</h2>
-        <p>Select an option from the sidebar.</p>
-    </div>
-</body>
-</html>
-
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-<?php mysqli_close($conn); ?>
