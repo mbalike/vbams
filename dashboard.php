@@ -355,7 +355,7 @@ $recent_drivers_result = mysqli_query($conn, $recent_drivers_query);
         <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">
             <i class="fas fa-clipboard-list"></i> Service Requests
         </a>
-        <a href="drivers.php" class="<?= ($current_page == 'drivers.php') ? 'active' : '' ?>">
+        <a href="drivers2.php" class="<?= ($current_page == 'drivers2.php') ? 'active' : '' ?>">
             <i class="fas fa-user-tie"></i> Drivers
         </a>
         <a href="reports.php" class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">
