@@ -392,6 +392,9 @@ $completed_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS co
         <a href="drivers2.php" class="<?= ($current_page == 'drivers2.php') ? 'active' : '' ?>">
             <i class="fas fa-user-tie"></i> Drivers
         </a>
+        <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
+            <i class="fas fa-gear"></i> Settings
+        </a>
        
         <a href="php/logout.php">
             <i class="fas fa-sign-out-alt"></i> Logout

@@ -590,3 +590,112 @@
 [2025-04-22 12:32:00] Formatted admin phone: +255742398600
 [2025-04-22 12:32:00] Successfully updated request #43 status to 'Completed'
 [2025-04-22 12:32:00] Redirecting to driver_requests2.php
+[2025-04-23 21:48:22] Driver assignment script started
+[2025-04-23 21:48:22] Processing assignment request: Driver ID 5 to Request ID 46
+[2025-04-23 21:48:22] Database transaction started
+[2025-04-23 21:48:22] Updated request status to 'Assigned' for request #46
+[2025-04-23 21:48:22] Updated driver #5 status to 'Busy'
+[2025-04-23 21:48:22] Driver details - Name: Jaren Jackson, Phone: 255742398600
+[2025-04-23 21:48:22] Request details - Location: Gomzi, Customer: Douglas Mshiu (+255783502757)
+[2025-04-23 21:48:22] Formatted driver phone: +255742398600
+[2025-04-23 21:48:22] Preparing to send SMS with message: Hello Jaren Jackson, new service request at Gomzi. Client: Douglas Mshiu (+255783502757). Car: Toyota Starlet. Issue: Gari mbovu tuu.
+[2025-04-23 21:48:22] Attempting to send SMS via Africa's Talking API...
+[2025-04-23 21:48:29] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_e8a67252d6c57b9cee189d3dcad2acf7
+                                    [messageParts] => 1
+                                    [number] => +255742398600
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-23 21:48:29] SMS sent successfully to driver. MessageId: ATXid_e8a67252d6c57b9cee189d3dcad2acf7
+[2025-04-23 21:48:29] Database transaction committed successfully
+[2025-04-23 21:48:29] Redirecting to service_requests.php
+[2025-04-23 21:53:34] Driver status update script started
+[2025-04-23 21:53:34] Processing status update - Request ID: 46, New Status: Accepted
+[2025-04-23 21:53:34] Retrieved data - Customer: Douglas Mshiu (+255783502757), Admin phone: 255742398600
+[2025-04-23 21:53:34] Formatted admin phone: +255742398600
+[2025-04-23 21:53:34] Successfully updated request #46 status to 'Accepted'
+[2025-04-23 21:53:34] Preparing to send customer notification: Hello Douglas Mshiu, your request has been accepted. The driver is on the way!
+[2025-04-23 21:53:34] Sending SMS to customer (+255783502757)...
+[2025-04-23 21:53:36] Customer SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_12f2750be39a9d2e92fba5b3c9717076
+                                    [messageParts] => 1
+                                    [number] => +255783502757
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-23 21:53:36] SMS sent successfully to customer. MessageId: ATXid_12f2750be39a9d2e92fba5b3c9717076
+[2025-04-23 21:53:36] Preparing to send admin notification: Request #46 has been accepted by a driver.
+[2025-04-23 21:53:36] Sending SMS to admin (+255742398600)...
+[2025-04-23 21:53:36] Admin SMS API Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_9f0f1f0ac1514fa43e78802cc1a22e2f
+                                    [messageParts] => 1
+                                    [number] => +255742398600
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-23 21:53:36] SMS sent successfully to admin. MessageId: ATXid_9f0f1f0ac1514fa43e78802cc1a22e2f
+[2025-04-23 21:53:36] Redirecting to driver_requests2.php

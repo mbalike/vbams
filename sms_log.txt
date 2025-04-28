@@ -89,3 +89,37 @@
 )
 
 [2025-04-11 11:09:49] SMS delivery failed with status: InsufficientBalance - No reason provided
+[2025-04-23 21:45:57] New service request #46 created for customer: Douglas Mshiu (+255783502757)
+[2025-04-23 21:45:57] Original admin phone: 255742398600
+[2025-04-23 21:45:57] Formatted admin phone: +255742398600
+[2025-04-23 21:45:57] Preparing to send SMS to admin with message: New service request #46 from Douglas Mshiu at Gomzi. Car: Toyota Starlet. Issue: Gari mbovu tuu. Contact: +255783502757.
+[2025-04-23 21:45:57] Attempting to send SMS via Africa's Talking API...
+[2025-04-23 21:46:00] SMS API Raw Response: Array
+(
+    [status] => success
+    [data] => stdClass Object
+        (
+            [SMSMessageData] => stdClass Object
+                (
+                    [Message] => Sent to 1/1 Total Cost: TZS 22.0000
+                    [Recipients] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [cost] => TZS 22.0000
+                                    [messageId] => ATXid_ed31ac7e0aa27c5183579af323f18122
+                                    [messageParts] => 1
+                                    [number] => +255742398600
+                                    [status] => Success
+                                    [statusCode] => 100
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+[2025-04-23 21:46:00] SMS sent successfully to admin. MessageId: ATXid_ed31ac7e0aa27c5183579af323f18122

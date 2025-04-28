@@ -5,19 +5,74 @@ include('php/auth.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$current_page = basename($_SERVER['PHP_SELF']);
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'driver') {
-    header("Location: ../login.php");
+$message = '';
+$messageClass = '';
+$role = '';
+$user_id = '';
+
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header("Location: login.html");
     exit();
 }
 
-$driver_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
+$role = $_SESSION['role'];
 
-$query = "SELECT * FROM requests WHERE assigned_driver_id = ?";
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $driver_id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $current_password = $_POST['current_password'];
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+    
+    // Validate input
+    if(empty($current_password) || empty($new_password) || empty($confirm_password)) {
+        $message = "All fields are required";
+        $messageClass = "error";
+    } elseif($new_password != $confirm_password) {
+        $message = "New passwords don't match";
+        $messageClass = "error";
+    } elseif(strlen($new_password) < 8) {
+        $message = "Password must be at least 8 characters long";
+        $messageClass = "error";
+    } else {
+        // Determine which table to use based on user_type
+        $table = ($role == 'admin') ? 'admins' : 'drivers';
+        
+        // Verify current password
+        $query = "SELECT password FROM $table WHERE id = '$user_id'";
+        $result = mysqli_query($conn, $query);
+        
+        if($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $stored_password = $row['password'];
+            
+            // Verify current password - assuming passwords are stored with password_hash()
+            // If they're stored in plaintext or using another method, adjust this check
+            if(password_verify($current_password, $stored_password)) {
+                // Hash the new password
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                
+                // Update password in the database
+                $update_query = "UPDATE $table SET password = '$hashed_password' WHERE id = '$user_id'";
+                if(mysqli_query($conn, $update_query)) {
+                    $message = "Password changed successfully!";
+                    $messageClass = "success";
+                } else {
+                    $message = "Error updating password: " . mysqli_error($conn);
+                    $messageClass = "error";
+                }
+            } else {
+                $message = "Current password is incorrect";
+                $messageClass = "error";
+            }
+        } else {
+            $message = "User not found";
+            $messageClass = "error";
+        }
+    }
+}
 
 
 ?>
@@ -373,10 +428,43 @@ $result = mysqli_stmt_get_result($stmt);
         .btn-close:hover {
             opacity: 1;
         }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
-    <button class="toggle-btn" id="toggleSidebar">
+<button class="toggle-btn" id="toggleSidebar">
         <i class="fas fa-bars"></i>
     </button>
     
@@ -399,73 +487,40 @@ $result = mysqli_stmt_get_result($stmt);
     
     <div class="content" id="content">
         <div class="dashboard-header">
-            <h2>Driver Dashboard</h2>
+            <h2>Settings</h2>
         </div>
         
        
         
-        <h3 class="section-header">My Requests</h3>
-        
-        <div class="request-table">
-            
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Client Name</th>
-                        <th>Phone</th>
-                        <th>Location</th>
-                        <th>Issue</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($row = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td><strong><?= $row['id'] ?></strong></td>
-                            <td><?= $row['name'] ?></td>
-                            <td><?= $row['phone'] ?></td>
-                            <td><?= $row['location'] ?></td>
-                            <td><?= $row['problem_description'] ?></td>
-                            <td>
-                                <?php
-                                $statusClass = 'bg-secondary';
-                                $statusIcon = '';
-                                
-                                if ($row['status'] == 'Pending') {
-                                    $statusClass = 'bg-warning';
-                                    $statusIcon = '<i class="fas fa- me-1"></i>';
-                                } elseif ($row['status'] == 'Completed') {
-                                    $statusClass = 'bg-success';
-                                    $statusIcon = '<i class="fas fa- me-1"></i>';
-                                } elseif ($row['status'] == 'Declined') {
-                                    $statusClass = 'bg-danger';
-                                    $statusIcon = '<i class="fas fa- me-1"></i>';
-                                }
-                                ?>
-                                <span class="badge <?= $statusClass ?>"><?= $statusIcon . $row['status'] ?></span>
-                            </td>
-                            
-                            <td>
-                                
-                            <form method="POST" action="php/driver_requests_status.php">
-                <input type="hidden" name="request_id" value="<?= htmlspecialchars($row['id']) ?>">
-                <?php if ($row['status'] == 'Pending'): ?>
-                    <button type="submit" name="status" value="Accepted" class="btn btn-info btn-sm">Accept</button>
-                    <button type="submit" name="status" value="Declined" class="btn btn-danger btn-sm">Decline</button>
-                <?php elseif ($row['status'] == 'Accepted'): ?>
-                    <button type="submit" name="status" value="Completed" class="btn btn-primary btn-sm">Complete</button>
-                <?php endif; ?>
-            </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+        <h3 class="section-header">Password Setting</h3>
+    
+    <h2>Change Password</h2>
+    
+    
+    <?php if(!empty($message)): ?>
+        <div class="message <?php echo $messageClass; ?>">
+            <?php echo $message; ?>
         </div>
-    </div>
-
+    <?php endif; ?>
+    
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <div class="form-group">
+            <label for="current_password">Current Password:</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        
+        <button type="submit">Change Password</button>
+    </form>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Sidebar toggle functionality
@@ -478,6 +533,5 @@ $result = mysqli_stmt_get_result($stmt);
                 content.classList.toggle("full-width");
             })});
     </script>
-    </body>
+</body>
 </html>
-<?php mysqli_close($conn); ?>
