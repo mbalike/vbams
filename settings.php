@@ -473,8 +473,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="dashboard.php" class="<?= ($current_page == 'dashboard.php') ? 'active' : '' ?>">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
+        <a href="service_requests.php" class="<?= ($current_page == 'service_requests.php') ? 'active' : '' ?>">
+            <i class="fas fa-clipboard-list"></i> Service Requests
+        </a>
         <a href="driver_requests2.php" class="<?= ($current_page == 'driver_requests2.php') ? 'active' : '' ?>">
             <i class="fas fa-clipboard-list"></i> My Requests
+        </a>
+        <a href="drivers2.php" class="<?= ($current_page == 'drivers2.php') ? 'active' : '' ?>">
+            <i class="fas fa-user-tie"></i> Drivers
         </a>
         <a href="settings.php" class="<?= ($current_page == 'settings.php') ? 'active' : '' ?>">
             <i class="fas fa-gear"></i> Settings
