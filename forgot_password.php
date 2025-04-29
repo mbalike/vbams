@@ -1,6 +1,8 @@
 <?php
-// forgot_password.php - Form to request password reset
-require_once '/php/db.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+include('php/db.php');
 session_start();
 
 $message = '';
@@ -8,7 +10,7 @@ $messageClass = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $user_type = mysqli_real_escape_string($conn, $_POST['role']);
+    $user_type = mysqli_real_escape_string($conn, $_POST['user_type']);
     
     if(empty($email) || empty($user_type)) {
         $message = "Please provide email and select user type";
