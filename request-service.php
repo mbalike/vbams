@@ -46,15 +46,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($car_model)) $errors[] = "Car model is required";
     if (empty($problem_description)) $errors[] = "Problem description is required";
 
-    // Phone number validation (adjust as needed for your country's format)
-    if (!empty($phone) && !preg_match('/^\+?[0-9]{10,15}$/', $phone)) {
-        $errors[] = "Invalid phone number format";
+  if (!empty($phone)) {
+    // Remove all non-digit characters
+    $phone = preg_replace('/\D/', '', $phone);
+
+    // If the phone starts with 0, replace it with 255
+    if (preg_match('/^0/', $phone)) {
+        $phone = '255' . substr($phone, 1);
+    }
+    // If it starts with country code and is prefixed with + or 00, normalize it
+    elseif (preg_match('/^(?:255|00255|\+255)/', $phone)) {
+        $phone = preg_replace('/^(?:\+|00)?255/', '255', $phone);
     }
 
-    // Format phone number to ensure it has the + prefix
-    if (!empty($phone) && !preg_match('/^\+/', $phone)) {
-        $phone = '+' . ltrim($phone, '0'); // Remove leading zero if present
+    // Final validation
+    if (!preg_match('/^255[0-9]{9}$/', $phone)) {
+        $errors[] = "Invalid phone number format";
     }
+}
+
 
     // If errors exist, store them in session and go back to form
     if (!empty($errors)) {
